@@ -1,6 +1,5 @@
 ;region Basic settings for all scripts
 #SingleInstance
-#LTrim
 A_WorkingDir := A_ScriptDir
 ;endregion Basic settings for all scripts
 
@@ -32,9 +31,6 @@ A_WorkingDir := A_ScriptDir
 	#Include visualWindow.ahk
 	#Include windowInfo.ahk
 
-#Include %A_LineFile%\..\external
-	#Include HTTPRequest.ahk
-	
 #Include %A_LineFile%\..\lib
 	#Include ahkCodeLib.ahk
 	#Include clipboardLib.ahk

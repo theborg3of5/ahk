@@ -1,17 +1,17 @@
 ; If Spotify is running.
-#If Config.doesWindowExist("Spotify")
+#HotIf Config.doesWindowExist("Spotify")
 	; Global search hotkey
-	#j::
+	#j:: {
 		Config.runProgram("Spotify")
-		WinWaitActive, % Config.windowInfo["Spotify"].titleString
-		Send, ^l
-	return
-#If
+		WinWaitActive(Config.windowInfo["Spotify"].titleString)
+		Send("^l")
+	}
+#HotIf
 
-#If Config.isWindowActive("Spotify")
+#HotIf Config.isWindowActive("Spotify")
 	; Alternative search hotkeys (that make more sense than the original)
 	^j::
-	^/::
-		Send, ^l
-	return
-#If
+	^/:: {
+		Send("^l")
+	}
+#HotIf

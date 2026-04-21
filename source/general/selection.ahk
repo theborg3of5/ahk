@@ -4,25 +4,25 @@
 !+f::SearchLib.selectedTextPrompt()
 
 ; Turn the selected text into a link to the URL on the clipboard.
-^+k::
+^+k:: {
 	HotkeyLib.waitForRelease()
-	SelectLib.linkSelectedText(Clipboard)
-return
+	SelectLib.linkSelectedText(A_Clipboard)
+}
 
 ; Open - open a variety of different things based on the selected text.
-^!#o:: new ActionObject(SelectLib.getText()).openWeb()
-^!#+o::new ActionObject(SelectLib.getText()).openEdit()
-#o::   new ActionObject(SelectLib.getText()).openWeb()  ; Work keyboard blocks everything with #!o, so here are some alternatives.
-#+o::  new ActionObject(SelectLib.getText()).openEdit() 
+^!#o:: ActionObject(SelectLib.getText()).openWeb()
+^!#+o::ActionObject(SelectLib.getText()).openEdit()
+#o::   ActionObject(SelectLib.getText()).openWeb()  ; Work keyboard blocks everything with #!o, so here are some alternatives.
+#+o::  ActionObject(SelectLib.getText()).openEdit()
 
 
 ; Copy link - copy links to a variety of different things based on the selected text.
-^!#l:: new ActionObject(SelectLib.getText()).copyLinkWeb()
-^!#+l::new ActionObject(SelectLib.getText()).copyLinkEdit()
+^!#l:: ActionObject(SelectLib.getText()).copyLinkWeb()
+^!#+l::ActionObject(SelectLib.getText()).copyLinkEdit()
 
 ; Hyperlink - get link based on the selected text and then apply it to that same text.
-^!#k:: new ActionObject(SelectLib.getText()).linkSelectedTextWeb()
-^!#+k::new ActionObject(SelectLib.getText()).linkSelectedTextEdit()
+^!#k:: ActionObject(SelectLib.getText()).linkSelectedTextWeb()
+^!#+k::ActionObject(SelectLib.getText()).linkSelectedTextEdit()
 
 ; Grab the selected text and pop it into a new Notepad++ window
 !#v::

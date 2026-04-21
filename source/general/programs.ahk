@@ -14,32 +14,32 @@
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
 
 ; Some programs are work-specific
-#If Config.contextIsWork
+#HotIf Config.contextIsWork
 	^!+c:: Config.runProgram("Windows Terminal", "-p ""Git Bash"" -d C:\EpicSource\claude -- " Config.getProgramPath("Claude Code"))
 	^!+e:: Config.activateProgram("EMC2", "EMC2Update") ; EMC2 needs this parameter to start up correctly.
 	^!+s:: VSCode.activateCode("EpicCode", Config.path["USER_ROOT"] "\EpicCode\EpicCode.code-workspace")
 	^!+u:: Config.activateProgram("Thunder")
 	^!#+v::Config.runProgram("Visual Studio")
-#If
+#HotIf
 
 ; Some programs are only available on specific machines
-#If Config.machineIsHomeDesktop
-	^!#f::
+#HotIf Config.machineIsHomeDesktop
+	^!#f:: {
 		; Safety check for VPN
 		if(Config.doesWindowExist("Cisco VPN")) {
-			MsgBox, VPN running!
+			MsgBox("VPN running!")
 			return
 		}
 		Config.runProgram("Firefox Portable")
-	return
-#If Config.machineIsHomeDesktop || Config.machineIsWorkDesktop || Config.machineIsHomeLaptop
+	}
+#HotIf Config.machineIsHomeDesktop || Config.machineIsWorkDesktop || Config.machineIsHomeLaptop
 	#f::  Config.activateProgram("Everything")
 	#t::  Config.runProgram("Telegram")
 	^!+o::Config.activateProgram("OneNote")
 	^!#g::Config.activateProgram("GitHub Desktop")
-#If Config.machineIsWorkDesktop
+#HotIf Config.machineIsWorkDesktop
 	^!#e::Config.activateProgram("Outlook")
-#If
+#HotIf
 
 ; Open up a temporary file in Notepad++ as a scratchpad.
 ^!#n::NotepadPlusPlus.openTempText("") ; Blank to clear it out

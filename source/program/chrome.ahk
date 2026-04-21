@@ -1,15 +1,15 @@
 ﻿; Google Chrome hotkeys.
-#If Config.isWindowActive("Chrome")
+#HotIf Config.isWindowActive("Chrome")
 	; Block "close all tabs" hotkey
 	^+w::return
 	
 	; Extensions hotkey.
-	^+e::
-		Send, !e       ; Main hamburger menu
-		Sleep, 100
-		Send, e{Enter} ; Extensions submenu
-		Send, {Enter}  ; Manage extensions
-	return
+	^+e:: {
+		Send("!e")       ; Main hamburger menu
+		Sleep(100)
+		Send("e{Enter}") ; Extensions submenu
+		Send("{Enter}")  ; Manage extensions
+	}
 	
 	; Handling for file links
 	^RButton::Chrome.copyLinkTarget() ; Copy
@@ -18,7 +18,7 @@
 	; Send page to IE/Edge
 	^+s::Config.runProgram("Internet Explorer", Chrome.getURL())
 	
-	^!d::Send, !+d ; Deluminate - site-level hotkey (Chrome won't let me bind this directly)
+	^!d::Send("!+d") ; Deluminate - site-level hotkey (Chrome won't let me bind this directly)
 	
 	; LastPass loses all settings when it updates periodically, so I'm overriding the hotkeys here instead.
 	!PgDn::!PgUp ; Reverse next/previous site hotkeys
@@ -26,14 +26,14 @@
 	!+l::Run("https://lastpass.com/vault/") ; Just launch this directly, instead of relying on the extension being able to run on the current page.
 	
 ; Chrome hotkeys that do not apply in Hyperspace.
-#If Config.isWindowActive("Chrome") && !Config.isWindowActive("Chrome Hyperspace")
+#HotIf Config.isWindowActive("Chrome") && !Config.isWindowActive("Chrome Hyperspace")
 	; Options hotkey.
-	!o::
+	!o:: {
 		HotkeyLib.waitForRelease() ; Presumably needed because the triggering hotkey has alt in it.
-		Send, !e ; Main hamburger menu.
-		Sleep, 100
-		Send, g  ; Settings
-	return
+		Send("!e") ; Main hamburger menu.
+		Sleep(100)
+		Send("g")  ; Settings
+	}
 	
 	; Copy title, stripping off the " - Google Chrome" at the end (and other special handling for specific pages like CodeSearch).
 	!c::Chrome.copyTitle()
@@ -44,7 +44,7 @@
 	!t::Telegram.shareURL(Chrome.getURL()) ; Share to Telegram.
 
 ; Chrome hotkeys that only apply on a DLG.
-#If Config.isWindowActive("Chrome") && WinActive("DLG ")
+#HotIf Config.isWindowActive("Chrome") && WinActive("DLG ")
 	^+o::VSCode.openCurrentDLG()   ; Open DLG in EpicCode.
 	!r::Chrome.openClientSVNLog()  ; Open client SVN log for a DLG.
-#If
+#HotIf

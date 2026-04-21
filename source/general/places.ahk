@@ -15,7 +15,7 @@ openPath(folderName) {
 ; Open folder from list
 !+w::
 	selectFolder() {
-		folderPaths := new Selector("folders.tls").setIcon(Config.getProgramPath("Explorer")).promptMulti("PATH")
+		folderPaths := Selector("folders.tls").setIcon(Config.getProgramPath("Explorer")).promptMulti("PATH")
 		For _, path in folderPaths {
 			path := Config.replacePathTags(path)
 			path := DateTimeLib.replaceTags(path) ; For any date/time-based folder paths, use the current date/time.
@@ -28,7 +28,7 @@ openPath(folderName) {
 				}
 				
 				if(GuiLib.showConfirmationPopup("This folder does not exist:`n" path "`n`nCreate it?", "Folder does not exist"))
-					FileCreateDir, % path
+					DirCreate(path)
 			}
 			if(FileLib.folderExists(path))
 				Run(path)
@@ -39,18 +39,18 @@ openPath(folderName) {
 !+p:: sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true) ; Force Unix path
 sendCleanedUpPath(mapToUnix := false) {
-	path := FileLib.cleanupPath(clipboard)
+	path := FileLib.cleanupPath(A_Clipboard)
 
 	if(mapToUnix)
 		path := FileLib.mapWindowsPathToUnix(path)
 
-	SendRaw, % path
+	SendText(path)
 }
 
 ; Selector to allow easy editing of config or code files that we edit often
 $!+c::
 	selectEditFile() {
-		filePaths := new Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).promptMulti("PATH")
+		filePaths := Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).promptMulti("PATH")
 		For _, path in filePaths {
 			path := Config.replacePathTags(path)
 			if(!FileExist(path)) {
@@ -70,9 +70,9 @@ $^!+f::Run("http://feedly.com/i/latest")
 ^!+a::
 openUsualSites() {
 	Config.runProgram("Gmail")
-	Sleep, 100
+	Sleep(100)
 	Run("https://lemmy.world/")
-	Sleep, 100
+	Sleep(100)
 	Run("http://feedly.com/i/latest")
 }
 

@@ -7,12 +7,12 @@ $^a::WindowActions.selectAll()
 $^Backspace::WindowActions.deleteWord()
 
 ; Escape key will generally minimize or close things.
-~Escape::
+~Escape:: {
 	if(Config.debugOn) ; GDB TODO window cache debug issue
-		MsgBox, Escaping!
+		MsgBox("Escaping!")
 	WindowActions.escAction()
-	KeyWait, Esc, T1 ; Ensures that we don't have fall-through window closing.
-return
+	KeyWait("Esc", "T1") ; Ensures that we don't have fall-through window closing.
+}
 
 ; When escape key is useful but is being used to minimize/close things, use backtick as a replacement.
 $`::WindowActions.backtickAction()
@@ -23,7 +23,7 @@ $!q::WindowActions.minimizeWindow()
 ; Sets current window to stay on top
 #+t::
 	toggleAlwaysOnTop() {
-		WinSet, AlwaysOnTop, Toggle, A
+		WinSetAlwaysOnTop(-1, "A")
 		if(WindowLib.isAlwaysOnTop("A"))
 			Toast.ShowMedium("Window set to always on top").setParent("A")
 		else
@@ -41,11 +41,11 @@ $!q::WindowActions.minimizeWindow()
 			return
 		}
 		
-		data := new Selector("resize.tls").prompt()
+		data := Selector("resize.tls").prompt()
 		if(!data)
 			return
 		
-		new VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Always center resized window
+		VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Always center resized window
 	}
 
 ; "Fix" window position and size to match configuration TL
@@ -53,13 +53,13 @@ $!q::WindowActions.minimizeWindow()
 ^#+f::WindowPositions.fixAllWindows()
 
 ; Scroll horizontally with Shift held down.
-#If !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
+#HotIf !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
 	+WheelUp::WheelLeft
 	+WheelDown::WheelRight
-#If
+#HotIf
 
 ; Use the extra mouse buttons to switch tabs in various programs
-#If !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client") && !WinActive("ahk_exe HaloInfinite.exe")
+#HotIf !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client") && !WinActive("ahk_exe HaloInfinite.exe")
 	XButton1::activateWindowUnderMouseAndSendKeys("^{Tab}")
 	XButton2::activateWindowUnderMouseAndSendKeys("^+{Tab}")
 	activateWindowUnderMouseAndSendKeys(keys) {
@@ -71,8 +71,8 @@ $!q::WindowActions.minimizeWindow()
 		if(Config.windowInfo["Windows Taskbar Secondary"].windowMatches(idString))
 			return
 		
-		WinActivate, % idString
+		WinActivate(idString)
 		
 		HotkeyLib.sendCatchableKeys(keys)
 	}
-#If
+#HotIf

@@ -1,27 +1,27 @@
 ﻿; Various global hotstrings.
 
 ;region Personal info
-:X:emaila:: Send, % Config.private["EMAIL"]
-:X:gemaila::Send, % Config.private["EMAIL_2"]
-:X:eemaila::Send, % Config.private["WORK_EMAIL"]
-:X:oemaila::Send, % Config.private["OUTLOOK_EMAIL"]
+:X:emaila:: Send(Config.private["EMAIL"])
+:X:gemaila::Send(Config.private["EMAIL_2"])
+:X:eemaila::Send(Config.private["WORK_EMAIL"])
+:X:oemaila::Send(Config.private["OUTLOOK_EMAIL"])
 
-:X:phoneno:: Send, % Config.private["PHONE_NUM"]
-:X:fphoneno::Send, % PhoneLib.formatNumber(Config.private["PHONE_NUM"])
+:X:phoneno:: Send(Config.private["PHONE_NUM"])
+:X:fphoneno::Send(PhoneLib.formatNumber(Config.private["PHONE_NUM"]))
 
-:X:waddr::   SendRaw, % Config.private["HOME_ADDRESS"]
-:X:eaddr::   Send,    % Config.private["WORK_ADDRESS"]
-:*0X:wzip::  Send,    % Config.private["HOME_ZIP_CODE_FULL"]
-:*0X:ezip::  Send,    % Config.private["WORK_ZIP_CODE"]
+:X:waddr::   SendText(Config.private["HOME_ADDRESS"])
+:X:eaddr::   Send(Config.private["WORK_ADDRESS"])
+:*0X:wzip::  Send(Config.private["HOME_ZIP_CODE_FULL"])
+:*0X:ezip::  Send(Config.private["WORK_ZIP_CODE"])
 
-:X?:ecompnum::Send, % Config.private["WORK_COMPUTER_NUM"]
+:X?:ecompnum::Send(Config.private["WORK_COMPUTER_NUM"])
 
-:X:uname::Send, % Config.private["USERNAME"]
+:X:uname::Send(Config.private["USERNAME"])
 ;endregion Personal info
 
 ;region Typo correction
 ;region Not typos while programming
-#If ! ( Config.isWindowActive("EpicStudio") || Config.isWindowActive("VSCode") || Config.isWindowActive("Visual Studio") )
+#HotIf ! ( Config.isWindowActive("EpicStudio") || Config.isWindowActive("VSCode") || Config.isWindowActive("Visual Studio") )
 :*0:,3::<3
 ::<#::<3
 ::<43::<3
@@ -29,7 +29,7 @@
 ::;)_::;)
 :::)_:::)
 :::)(:::)
-#If
+#HotIf
 ;endregion Not typos while programming
 
 ::*shurgs*::*shrugs*
@@ -73,9 +73,9 @@
 ::everythign::everything
 ;endregion Typo correction
 	
-#If !Config.findWindowName("A").isAnyOf(["EpicStudio", "Visual Studio", "VSCode"])
+#HotIf !Config.findWindowName("A").isAnyOf(["EpicStudio", "Visual Studio", "VSCode"])
 	::helptext::help text
-#If
+#HotIf
 
 ;region Expansions
 ::f'n::function
@@ -113,19 +113,19 @@
 ;endregion Expansions
 
 ;region Date and time
-:X:idate::Send, % FormatTime(A_Now, "M/d/yy")
-:X:itime::Send, % FormatTime(A_Now, "h:mm tt")
+:X:idate::Send(FormatTime(A_Now, "M/d/yy"))
+:X:itime::Send(FormatTime(A_Now, "h:mm tt"))
 
-:X:dashidate::Send, % FormatTime(A_Now, "M-d-yy")
-:X:didate::   Send, % FormatTime(A_Now, "dddd`, M/d")
-:X:iddate::   Send, % FormatTime(A_Now, "M/d`, dddd")
+:X:dashidate::Send(FormatTime(A_Now, "M-d-yy"))
+:X:didate::   Send(FormatTime(A_Now, "dddd`, M/d"))
+:X:iddate::   Send(FormatTime(A_Now, "M/d`, dddd"))
 
-::.tscell::
-	Send, % FormatTime(A_Now, "M/d/yy")
-	Send, {Tab}
-	Send, % FormatTime(A_Now, "h:mm tt")
-	Send, {Tab}
-return
+::.tscell:: {
+	Send(FormatTime(A_Now, "M/d/yy"))
+	Send("{Tab}")
+	Send(FormatTime(A_Now, "h:mm tt"))
+	Send("{Tab}")
+}
 
 ; Relative dates/times
 :X:aidate:: sendArbitraryDate("M/d/yy")
@@ -145,9 +145,9 @@ return
 :X:devf::   sendFolderPath("USER_DEV")
 :X:zrzlf::  sendFolderPath("USER_DEV", "zrzl")
 	
-#If !WinActive("ahk_class AutoHotkeyGUI") ; Don't do this in Selector popups (yes this catches more than that)
+#HotIf !WinActive("ahk_class AutoHotkeyGUI") ; Don't do this in Selector popups (yes this catches more than that)
 	:X:dlf::sendFolderPath("USER_DOWNLOADS")
-#If
+#HotIf
 
 :X:otmf::sendFolderPath("ONETASTIC_MACROS")
 :X:npsf::sendFolderPath("NOTEPAD_PP_SESSIONS")
@@ -176,7 +176,7 @@ return
 :X:esf::sendFolderPath("EPIC_SOURCE_CURRENT")
 
 ; URLs
-:X:lpv::Send, % "chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html"
+:X:lpv::Send("chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html")
 ;endregion Folders and paths
 
 ;region Useful strings
@@ -200,7 +200,7 @@ sendArbitraryDate(format) {
 	if(dateString = "")
 		return ""
 	
-	new RelativeDate(dateString).sendInFormat(format)
+	RelativeDate(dateString).sendInFormat(format)
 }
 sendArbitraryTime(format) {
 	QUOTE := """"
@@ -210,7 +210,7 @@ sendArbitraryTime(format) {
 	if(timeString = "")
 		return ""
 	
-	new RelativeTime(timeString).sendInFormat(format)
+	RelativeTime(timeString).sendInFormat(format)
 }
 
 sendFilePath(folderName, subPath := "") {

@@ -5,7 +5,7 @@ ScriptTrayInfo.Init("AHK: Vim Bindings for Chrome/Firefox")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
 
 global vimKeysOn := 1
-states := {}
+states := Map()
 states["A_IsSuspended", 1]                 := "vimSuspend.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 0] := "vimPause.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 1] := "vim.ico"
@@ -17,46 +17,46 @@ global autoPaused := false ; Says whether we just temporarily paused vimKeys aut
 
 ; After a certain time not having browser focused, reset vimKeys to on.
 IDLE_TIME := 5 * 60 * 1000 ; 5 minutes
-SetTimer, vimIdle, %IDLE_TIME%
-vimIdle:
+SetTimer(vimIdle, IDLE_TIME)
+vimIdle() {
 	if(!browserActive())
 		turnVimKeysOn()
-return
+}
 
 ; Run on any page in the browser, regardless of state.
-#If browserActive()
-	!m::
+#HotIf browserActive()
+	!m:: {
 		turnVimKeysOn()
-	return
-	
+	}
+
 	F6::
 	F7::
 	F8::
-	F9::
+	F9:: {
 		HotkeyLib.releaseAllModifiers() ; Make very sure that we're not also holding down shift (which would close the window).
-		Send, ^w
+		Send("^w")
 		turnVimKeysOn()
-	return
-	
+	}
+
 	; Special addition for when j/k turned off because special page.
-	RAlt & j::Send, {Down}
-	RAlt & k::Send, {Up}
-#If
+	RAlt & j::Send("{Down}")
+	RAlt & k::Send("{Up}")
+#HotIf
 
 ; Run as long as vimkeys are on.
-#If browserActive() && areVimKeysOn()
+#HotIf browserActive() && areVimKeysOn()
 	; Next/Previous Tab.
-	o::Send, ^{Tab}
-	u::Send, ^+{Tab}
-	
+	o::Send("^{Tab}")
+	u::Send("^+{Tab}")
+
 	; Auto-pause (so we'll switch back on enter/escape)
 	~^l::
 	~^t::
 	~^f::
-	~^Space::
+	~^Space:: {
 		turnVimOffAuto()
-	return
-	
+	}
+
 	; Keys that turn vimkeys off, because you're probably typing something else.
 	~a:: ; Letters
 	~b::
@@ -139,37 +139,37 @@ return
 	~+]::
 	~+`;::
 	~+'::
-	~+/::
+	~+/:: {
 		turnVimOffManual()
-	return
-#If
+	}
+#HotIf
 
 ; Run as long as we're not on an exclude page.
-#If browserActive() && !isPageWithExcludeTitle()
+#HotIf browserActive() && !isPageWithExcludeTitle()
 	; Unpause for special cases.
 	~$Esc::
-	~$Enter::
+	~$Enter:: {
 		if(autoPaused)
 			turnVimKeysOn()
-	return
-#If
+	}
+#HotIf
 
 ; Normal key commands
 ; Run if vimkeys are on and we're not on an excluded page.
-#If browserActive() && areVimKeysOn() && !isPageWithExcludeTitle()
+#HotIf browserActive() && areVimKeysOn() && !isPageWithExcludeTitle()
 	; Up/Down/Left/Right.
-	j::Send, {Down}
-	k::Send, {Up}
-	
+	j::Send("{Down}")
+	k::Send("{Up}")
+
 	; Page Up/Down/Top/Bottom.
-	`;::Send, {PgDn}
-	p::Send, {PgUp}
-	[::Send, {Home}
-	]::Send, {End}
-	
+	`;::Send("{PgDn}")
+	p::Send("{PgUp}")
+	[::Send("{Home}")
+	]::Send("{End}")
+
 	; Bookmarklet hotkeys.
 	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.
-#If
+#HotIf
 
 
 getExcludedTitles() {
@@ -214,8 +214,8 @@ setVimKeysState(toState) {
 }
 
 sendToOmniboxAndGo(url) {
-	Send, ^l
-	Sleep, 100
-	SendRaw, %url%
-	Send, {Enter}
+	Send("^l")
+	Sleep(100)
+	SendText(url)
+	Send("{Enter}")
 }

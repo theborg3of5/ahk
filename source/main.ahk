@@ -1,23 +1,21 @@
 ﻿; All scripts with Unicode characters in them should be saved in UTF-8-BOM encoding, so that any Unicode characters inside them are handled appropriately (per https://www.autohotkey.com/docs/FAQ.htm#nonascii ).
 
-#Warn All                                     ; Show warnings, except for:
-#Warn UseUnsetLocal, Off                      ; 	Using local variables before they're set (using default values in a function triggers this)
-#Warn UseUnsetGlobal, Off                     ; 	Using global variables before they're set
+#Warn All                                     ; Show all warnings.
 #Hotstring *                                  ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Main)
 
-SetWorkingDir, %A_ScriptDir%                 ; Ensures a consistent starting directory.
-DetectHiddenWindows, On                      ; Do search hidden windows
-SetTitleMatchMode, % TitleMatchMode.Contains ; Match text anywhere inside window titles
-SetCapsLockState,   AlwaysOff                ; Turn off Caps Lock so it can be used as a hotkey. Keep these three lock states in sync with afterUnsuspend() below.
-SetScrollLockState, AlwaysOff                ; Turn off Scroll Lock so it can be used as a hotkey.
-SetNumLockState,    AlwaysOn                 ; Force NumLock to always stay on.
-SetDefaultMouseSpeed, 0                      ; Fasted mouse speed for mouse commands (MouseMove in particular)
-SetMouseDelay, 0                             ; Smallest possible delay after mouse movements/clicks
-FileEncoding, UTF-8                          ; Read files using UTF-8 encoding by default.
+A_WorkingDir := A_ScriptDir                  ; Ensures a consistent starting directory.
+A_DetectHiddenWindows := true                ; Do search hidden windows
+SetTitleMatchMode(TitleMatchMode.Contains)   ; Match text anywhere inside window titles
+SetCapsLockState("AlwaysOff")                ; Turn off Caps Lock so it can be used as a hotkey. Keep these three lock states in sync with afterUnsuspend() below.
+SetScrollLockState("AlwaysOff")              ; Turn off Scroll Lock so it can be used as a hotkey.
+SetNumLockState("AlwaysOn")                  ; Force NumLock to always stay on.
+A_DefaultMouseSpeed := 0                     ; Fasted mouse speed for mouse commands (MouseMove in particular)
+SetMouseDelay(0)                             ; Smallest possible delay after mouse movements/clicks
+FileEncoding("UTF-8")                        ; Read files using UTF-8 encoding by default.
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
 subFolder := A_ScriptDir "\sub\"
@@ -71,12 +69,12 @@ Run(subFolder "windowMoverSizer.ahk")
 ; Before/after suspend hooks to allow *Lock keys to be hotkeys or ignored while script is active,
 ; but back to normal when script is suspended.
 beforeSuspend() {
-	SetCapsLockState,   Off
-	SetScrollLockState, Off
-	SetNumLockState,    On
+	SetCapsLockState("Off")
+	SetScrollLockState("Off")
+	SetNumLockState("On")
 }
 afterUnsuspend() {
-	SetCapsLockState,   AlwaysOff
-	SetScrollLockState, AlwaysOff
-	SetNumLockState,    AlwaysOn
+	SetCapsLockState("AlwaysOff")
+	SetScrollLockState("AlwaysOff")
+	SetNumLockState("AlwaysOn")
 }

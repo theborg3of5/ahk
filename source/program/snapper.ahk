@@ -1,10 +1,10 @@
 ﻿; Main Snapper window
-#If Config.isWindowActive("Snapper")
+#HotIf Config.isWindowActive("Snapper")
 	^h:: Snapper.sendItemsToIgnore()       ; Send string of items to ignore, based on the given INI.
 	^+d::Snapper.diffMultiResponseValues() ; Diff the selected help text
-#If
+#HotIf
 
 ; Add record window
-#If Config.isWindowActive("Snapper Add Records")
+#HotIf Config.isWindowActive("Snapper Add Records")
 	^Enter::Snapper.addMultipleRecordsFromAddPopup()
-#If
+#HotIf

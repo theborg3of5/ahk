@@ -13,7 +13,7 @@
 	sendUnwrappedPlainText() {
 		HotkeyLib.waitForRelease()
 
-		newText := Clipboard
+		newText := A_Clipboard
 
 		; Unwrap by replacing all newlines with spaces
 		newText := newText.replace("`r`n"," ")
@@ -27,7 +27,7 @@
 		; Drop leading/trailing spaces
 		newText := newText.withoutWhitespace()
 
-		Send, {Text}%newText%
+		SendText(newText)
 	}
 	
 ; Send a (newline-separated) text/URL combo from the clipboard as a link.
@@ -35,7 +35,7 @@
 	sendLinkedTextFromClipboard() {
 		HotkeyLib.waitForRelease()
 		
-		value := clipboard.replace("`r`n", "`n") ; Replace `r`n with just `n to avoid counting/highlighting mishaps
+		value := A_Clipboard.replace("`r`n", "`n") ; Replace `r`n with just `n to avoid counting/highlighting mishaps
 		text := value.beforeString("`n")
 		url  := value.afterString("`n")
 
@@ -43,12 +43,12 @@
 	}
 
 ; Send the clipboard as a list.
-^#v::new FormattedList(Clipboard).sendList()
+^#v::FormattedList(A_Clipboard).sendList()
 
 ; Send specific symbols
 #`;::
 	selectSymbols() {
-		symbols := new Selector("symbols.tls").promptMulti("CHAR")
+		symbols := Selector("symbols.tls").promptMulti("CHAR")
 		For _, symbol in symbols
-			Send, % symbol
+			Send(symbol)
 	}

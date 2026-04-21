@@ -9,7 +9,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		; We have to check this directly instead of putting it under an #If directive, so that the various program-specific #If directives win.
 		if (!Config.contextIsWork) {
 			HotkeyLib.waitForRelease()
-			Send, % A_ThisHotkey.removeFromStart("$")
+			Send(A_ThisHotkey.removeFromStart("$"))
 			return ""
 		}
 		
@@ -17,17 +17,17 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		if (!record)
 			return ""
 		
-		return new ActionObjectEMC2(record.id, record.ini)
+		return ActionObjectEMC2(record.id, record.ini)
 	}
 
-#If Config.contextIsWork ; Any work machine
+#HotIf Config.contextIsWork ; Any work machine
 	;region TLG record IDs
 	^!+d::
 		sendTLGRecId() {
 			idList := ""
 			For _, recId in selectTLGRecIDs("Select EMC2 Record to Send")
 				idList := idList.appendPiece(", ", recId.removeFromStart("P.").removeFromStart("Q."))
-			Send, % idList
+			Send(idList)
 		}
 	^!#d::
 		webTLGRecs() {
@@ -44,7 +44,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		emc2Path := Config.getProgramPath("EMC2")
 		icon := FileLib.getParentFolder(emc2Path, 2) "\en-US\Images\emc2.ico" ; Icon is separate from the executable so we have to jump to it.
 
-		s := new Selector("tlg.tls").setTitle(title).setIcon(icon).overrideFieldsOff()
+		s := Selector("tlg.tls").setTitle(title).setIcon(icon).overrideFieldsOff()
 		s.dataTableList.filterOutIfColumnBlank("RECORD")
 		s.dataTableList.filterOutIfColumnMatch("RECORD", "GET") ; Special keyword used for searching existing windows, can search for that with ^!i instead.
 		return s.promptMulti("RECORD")
@@ -53,13 +53,13 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		actionObjects := []
 		For _, recId in selectTLGRecIDs(title) {
 			if (recId.startsWith("P."))
-				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("P."), "PRJ"))
+				actionObjects.push(ActionObjectEMC2(recId.removeFromStart("P."), "PRJ"))
 			else if (recId.startsWith("Q."))
-				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("Q."), "QAN"))
+				actionObjects.push(ActionObjectEMC2(recId.removeFromStart("Q."), "QAN"))
 			else if (recId.startsWith("S."))
-				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("S."), "SLG"))
+				actionObjects.push(ActionObjectEMC2(recId.removeFromStart("S."), "SLG"))
 			else
-				actionObjects.push(new ActionObjectEMC2(recId, "DLG"))
+				actionObjects.push(ActionObjectEMC2(recId, "DLG"))
 		}
 		
 		return actionObjects
@@ -107,22 +107,22 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		selectEnvironmentId() {
 			environments := EpicLib.selectEpicEnvironments("Insert ID for Environment")
 			For _, env in environments {
-				Send, % env["ENV_ID"]
-				Send, {Enter} ; Submit it too.
+				Send(env["ENV_ID"])
+				Send("{Enter}") ; Submit it too.
 			}
 		}
 	
 	^!#s::
 		selectSnapper() {
 			selectedText := SelectLib.getText()
-			record := new EpicRecord().initFromRecordString(selectedText)
+			record := EpicRecord().initFromRecordString(selectedText)
 			
 			; Don't include invalid INIs (anything that's not 3 characters)
-			if (record.ini && record.ini.length() != 3)
+			if (record.ini && StrLen(record.ini) != 3)
 				record := ""
 			
-			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment").setIcon(Config.getProgramPath("Snapper"))
-			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out
+			s := Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment").setIcon(Config.getProgramPath("Snapper"))
+			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides(Map("INI", record.ini, "ID", record.id)) ; Add fields for INI/ID and default in any values that we figured out
 			environments := s.promptMulti() ; Each individual element is for a specific environment, which also includes any specified records.
 			For _, env in environments {
 				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
@@ -138,14 +138,14 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	sendStandardEMC2ObjectString(idOnly := false) {
 		HotkeyLib.waitForRelease()
 		
-		record := EpicLib.selectEMC2RecordFromText(clipboard)
+		record := EpicLib.selectEMC2RecordFromText(A_Clipboard)
 		if (!record)
 			return
 		ini := record.ini
 		id  := record.id
 		
 		if (idOnly)
-			Send, % id
+			Send(id)
 		else if (Config.isWindowActive("Chrome Workplans"))
 			ClipboardLib.send(EpicLib.buildEMC2ObjectString(record, true)) ; Put title first for workplans
 		else
@@ -157,10 +157,10 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		sendEMC2RecordID() {
 			record := EpicLib.selectEMC2RecordFromUsefulTitles()
 			if (record)
-				SendRaw, % record.id
+				SendText(record.id)
 		}
 
-#If Config.machineIsWorkDesktop ; Main work desktop only
+#HotIf Config.machineIsWorkDesktop ; Main work desktop only
 	^!+r::
 		selectThunder() {
 			environments := EpicLib.selectEpicEnvironments("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
@@ -183,15 +183,15 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 
 			; Wait for the windows to initialize - otherwise their titles with $J don't come through
 			; even with fixPuttyTabTitle below.
-			expectedCount := startCount + environments.length()
-			Loop, 5 {
+			expectedCount := startCount + environments.Length
+			Loop 5 {
 				newCount := WindowLib.countMatchingWindows("$J: ahk_exe Putty.exe", TitleMatchMode.Contains)
 				if (newCount >= expectedCount)
 					Break ; Windows are all initialized
 
-				Sleep, 1000 ; Wait for the window(s) to open/initialize
+				Sleep(1000) ; Wait for the window(s) to open/initialize
 			}
-			Sleep, 100 ; Wait a tick more to ensure the titles are set properly.
+			Sleep(100) ; Wait a tick more to ensure the titles are set properly.
 			MTPutty.attachOrphanedPuttyWindows() ; Only fixes the focused tab, but I can do any others manually if needed.
 		}
 	
@@ -206,11 +206,10 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 					
 					; Also fake-maximize the window once it shows up.
 					if (environments.length() = 1) { ; But don't bother if we're dealing with multiple windows - just launch them all at once and I'll fix the size manually.
-						WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
-						if (!ErrorLevel) ; Set if we timed out or if somethign else went wrong.
+						if (WinWaitActive("ahk_exe vmware-view.exe",, 10, "VMware Horizon Client")) ; Ignore the loading-type popup that happens initially with excluded title.
 							WindowPositions.fixWindow()
 					}
 				}
 			}
 		}
-#If
+#HotIf

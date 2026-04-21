@@ -1,23 +1,23 @@
 ; OneNote hotkeys.
-#If Config.isWindowActive("OneNote")
+#HotIf Config.isWindowActive("OneNote")
 	; Block certain hotkeys that I accidentally trigger, but don't want to use
 	*^+1::return ; Add Outlook task
 	
 	; Make ctrl+tab (and XButtons) switch pages, not sections
-	^Tab:: Send, ^{PgDn}
-	^+Tab::Send, ^{PgUp}
-	XButton1::Send, ^{PgDn}
-	XButton2::Send, ^{PgUp}
+	^Tab:: Send("^{PgDn}")
+	^+Tab::Send("^{PgUp}")
+	XButton1::Send("^{PgDn}")
+	XButton2::Send("^{PgUp}")
 	; Make ctrl+page down/up switch sections
-	^PgDn::Send, ^{Tab}
-	^PgUp::Send, ^+{Tab}
+	^PgDn::Send("^{Tab}")
+	^PgUp::Send("^+{Tab}")
 	
 	; Expand and collapse outlines
 	!Left:: !+-
 	!Right::!+=
 	; Alternate history back/forward
-	!+Left:: Send, !{Left}
-	!+Right::Send, !{Right}
+	!+Left:: Send("!{Left}")
+	!+Right::Send("!{Right}")
 	
 	; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and EpicStudio.
 	!Up::  !+Up
@@ -27,33 +27,33 @@
 	+WheelUp::  OneNote.scrollLeft()
 	+WheelDown::OneNote.scrollRight()
 	
-	^+0::Send, ^0 ; Since we're using ^0 to set zoom to 100% below, add a replacement hotkey for clearing all tags.
-	^!n::Send, ^+n ; 'Normal' text formatting, as ^+n is already being used for new subpage.
-	^7:: Send, ^6 ; Make ^7 do the same tag (Done green check) as ^6.
-	^+8::SendRaw, % "*" Config.private["INITIALS"] " " FormatTime(, "MM/yy") ; Insert contact comment
-	^!4::Send, ^!5 ; Use Header 5 instead of Header 4 - Header 4 is just an italicized Header 3, which isn't distinct enough for me.
+	^+0::Send("^0") ; Since we're using ^0 to set zoom to 100% below, add a replacement hotkey for clearing all tags.
+	^!n::Send("^+n") ; 'Normal' text formatting, as ^+n is already being used for new subpage.
+	^7:: Send("^6") ; Make ^7 do the same tag (Done green check) as ^6.
+	^+8::SendText("*" Config.private["INITIALS"] " " FormatTime(, "MM/yy")) ; Insert contact comment
+	^!4::Send("^!5") ; Use Header 5 instead of Header 4 - Header 4 is just an italicized Header 3, which isn't distinct enough for me.
 	
 	; Print preview
-	^!p::
-		Send, !fpr
-	return
+	^!p:: {
+		Send("!fpr")
+	}
 	
 	; Delete the entire current line
-	^d::
+	^d:: {
 		OneNote.escapePastePopup()
 		OneNote.selectLine()
-		Send, {Delete}
-	return
+		Send("{Delete}")
+	}
 	
 	; Notebook syncing
-	^s::
+	^s:: {
 		OneNote.escapePastePopup()
-		Send, +{F9} ; Sync This Notebook Now
-	return
-	^+s::
+		Send("+{F9}") ; Sync This Notebook Now
+	}
+	^+s:: {
 		OneNote.escapePastePopup()
-		Send, {F9} ; Sync All Notebooks Now
-	return
+		Send("{F9}") ; Sync All Notebooks Now
+	}
 	
 	; Focus notebooks by index
 	!1::OneNote.focusNotebookWithIndex(1)
@@ -101,4 +101,4 @@
 	
 	; Update links for a dev structure section header
 	!+#k::OneNote.linkDevStructureSectionTitle()
-#If
+#HotIf

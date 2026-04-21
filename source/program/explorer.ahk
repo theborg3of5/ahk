@@ -1,6 +1,6 @@
-#If Config.isWindowActive("Explorer")
+#HotIf Config.isWindowActive("Explorer")
 	; Open "new tab" (to This PC)	
-	#e::Send, ^t ; While explorer is already active - otherwise, this activates it.
+	#e::Send("^t") ; While explorer is already active - otherwise, this activates it.
 
 	; Copy current folder/file paths to clipboard
 	!c::  Explorer.copySelectedPath()                 ; Current file (or folder if nothing selected)
@@ -24,29 +24,27 @@
 			Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " folderPath)
 		}
 	
-#If Config.isWindowActive("Explorer") || WinActive("ahk_class Progman ahk_exe explorer.exe") ; Explorer window or Desktop
+#HotIf Config.isWindowActive("Explorer") || WinActive("ahk_class Progman ahk_exe explorer.exe") ; Explorer window or Desktop
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()
-#If
+#HotIf
 
-#If Explorer.mouseIsOverTaskbar()
+#HotIf Explorer.mouseIsOverTaskbar()
 	; Middle-click on taskbar buttons to close them.
 	$MButton::
 		closeWindowFromTaskbar() {
 			; Open up right-click menu
-			Send, {RButton}
+			Send("{RButton}")
 
 			; Wait for the right-click menu to appear (for up to 1 second)
-			WinWaitActive, % Config.windowInfo["Windows Taskbar Jump Menu"].titleString, , 1
-			
-			; If it didn't (we timed out), show an error toast that this is probably a new
-			; window we should add to Explorer.currentWindowHasNoBasicRightClickMenu().
-			if (ErrorLevel = 1) {
+			if !WinWaitActive(Config.windowInfo["Windows Taskbar Jump Menu"].titleString, , 1) {
+				; If it didn't (we timed out), show an error toast that this is probably a new
+				; window we should add to Explorer.currentWindowHasNoBasicRightClickMenu().
 				Toast.ShowError("Failed to close window", "Jump menu did not appear within 1 second")
 				return
 			}
-	
-			Send, {Up}{Enter}
+
+			Send("{Up}{Enter}")
 		}
-#If
+#HotIf
 

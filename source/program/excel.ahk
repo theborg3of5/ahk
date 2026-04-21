@@ -1,46 +1,46 @@
 ; Excel hotkeys.
-#If Config.isWindowActive("Excel")
+#HotIf Config.isWindowActive("Excel")
 	; Copy the current document location
-	!c::
-		Send, !fi ; File > Info
-		Sleep, 1000 ; Wait for File pane to finish appearing
+	!c:: {
+		Send("!fi") ; File > Info
+		Sleep(1000) ; Wait for File pane to finish appearing
 		ClipboardLib.copyFilePath("c") ; Copy Path
-		Send, {Esc} ; Close the File pane
-	return
+		Send("{Esc}") ; Close the File pane
+	}
 	
 	; Save as
-	^+s::Send, {F12}
+	^+s::Send("{F12}")
 	
 	; Insert/delete row
-	^=::
-		Send, ^+= 		; Insert popup
-		Send, !r 		; Entire row
-		Send, {Enter} 	; Accept popup
-	return
-	$^-::
-		Send, ^- 		; Delete popup
-		Send, !r 		; Entire row
-		Send, {Enter} 	; Accept popup
-	return
+	^=:: {
+		Send("^+=") 		; Insert popup
+		Send("!r") 		; Entire row
+		Send("{Enter}") 	; Accept popup
+	}
+	$^-:: {
+		Send("^-") 		; Delete popup
+		Send("!r") 		; Entire row
+		Send("{Enter}") 	; Accept popup
+	}
 
 	; Insert table (alternate since ^t is used for new tab below)
-	!t::Send, ^t
+	!t::Send("^t")
 
 	; New worksheet (tab)
-	^t::Send, +{F11}
+	^t::Send("+{F11}")
 	
 	; Next/previous worksheet
 	^Tab::
-	XButton1::
-		Send, ^{PgDn}
-	return
+	XButton1:: {
+		Send("^{PgDn}")
+	}
 	^+Tab:: ; Have to make sure the shift gets released, so can't be basic hotkey (which acts as blind mode?).
-	XButton2::
-		Send, ^{PgUp}
-	return
+	XButton2:: {
+		Send("^{PgUp}")
+	}
 	
 	; Fill down
-	^+f::Send, !hfid ; Home tab > Fill > Down
+	^+f::Send("!hfid") ; Home tab > Fill > Down
 	
 	; Fix column widths
 	^+w::Excel.autoFixColumnWidth()
@@ -49,10 +49,10 @@
 	^+b::Excel.boldFreezeHeaderRow()
 	
 	; Filter and format table nicely.
-	!b::
-		Send, ^a^a ; Select All (twice to get everything)
-		Send, !at  ; Data tab > Filter
+	!b:: {
+		Send("^a^a") ; Select All (twice to get everything)
+		Send("!at")  ; Data tab > Filter
 		Excel.boldFreezeHeaderRow()
 		Excel.autoFixColumnWidth()
-	return
-#If
+	}
+#HotIf

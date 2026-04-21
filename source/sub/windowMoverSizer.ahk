@@ -5,12 +5,12 @@
 ScriptTrayInfo.Init("AHK: Move and resize windows", "moveSize.ico", "moveSizeRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
 
-SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
-CoordMode, Mouse, Screen
+SetWinDelay(2) ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+CoordMode("Mouse", "Screen")
 global SnappingDistance := 25 ; 25px
 
 ; Don't do anything while certain windows are active.
-#If !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
+#HotIf !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 
 	; Alt+Left Drag to move
 	!LButton::
@@ -80,12 +80,12 @@ global SnappingDistance := 25 ; 25px
 			titleString := WindowLib.getIdTitleStringUnderMouse()
 			
 			if(WindowLib.isMaximized(titleString))
-				WinRestore, % titleString
+				WinRestore(titleString)
 			else if(!WindowLib.isMinimized(titleString)) ; Window is not maximized or minimized
-				WinMaximize, % titleString
+				WinMaximize(titleString)
 		}
-	
-#If
+
+#HotIf
 
 
 ;---------
@@ -98,7 +98,7 @@ global SnappingDistance := 25 ; 25px
 ; SIDE EFFECTS:   Restores the window if it's maximized, before we take our initial measurements of
 ;                 the window.
 ;---------
-dragWindowPrep(ByRef window, ByRef mouseStart) {
+dragWindowPrep(&window, &mouseStart) {
 	titleString := WindowLib.getIdTitleStringUnderMouse()
 	if(WindowLib.isNoMoveSizeWindow(titleString))
 		return false
@@ -106,11 +106,11 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	; Restore maximized windows before we start so we can get their proper size before we start moving.
 	; Yes, VisualWindow will handle restoring itself, but not until after we've gotten our "start" position for the window.
 	if(WindowLib.isMaximized(titleString))
-		WinRestore, % titleString
-	
-	window := new VisualWindow(titleString, SnappingDistance)
+		WinRestore(titleString)
+
+	window := VisualWindow(titleString, SnappingDistance)
 	window.snapOn() ; Turn on snapping
-	mouseStart := new MousePosition()
+	mouseStart := MousePosition()
 	
 	return true
 }

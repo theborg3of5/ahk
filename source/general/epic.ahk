@@ -205,7 +205,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 					EpicLib.runVDI(env["VDI_ID"])
 					
 					; Also fake-maximize the window once it shows up.
-					if (environments.length() = 1) { ; But don't bother if we're dealing with multiple windows - just launch them all at once and I'll fix the size manually.
+					if (environments.Length = 1) { ; But don't bother if we're dealing with multiple windows - just launch them all at once and I'll fix the size manually.
 						if (WinWaitActive("ahk_exe vmware-view.exe",, 10, "VMware Horizon Client")) ; Ignore the loading-type popup that happens initially with excluded title.
 							WindowPositions.fixWindow()
 					}

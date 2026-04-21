@@ -217,7 +217,7 @@ fixColumnWidths(row, columnWidthsAry) {
 	
 	For columnIndex,value in splitRow(row) {
 		columnWidth := columnWidthsAry[columnIndex]
-		valueWidth := Floor(value.length() / TAB_WIDTH) ; Width in tabs
+		valueWidth := Floor(StrLen(value) / TAB_WIDTH) ; Width in tabs
 		newRow .= value StringLib.getTabs(columnWidth - valueWidth)
 	}
 	

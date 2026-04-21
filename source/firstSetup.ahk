@@ -2,7 +2,7 @@
 
 #Include %A_ScriptDir%\common\common.ahk
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
-progToast := new ProgressToast("First-time setup")
+progToast := ProgressToast("First-time setup")
 
 ; Various paths needed throughout.
 ahkRootPath    := FileLib.getParentFolder(A_ScriptDir, 1)
@@ -11,8 +11,8 @@ startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
 ; Check for command line arguments - which machine to use, and whether to suppress the "run now?" prompt.
-machineChoice := A_Args[1]
-useSlimMode   := A_Args[2]
+machineChoice := A_Args.Has(1) ? A_Args[1] : ""
+useSlimMode   := A_Args.Has(2) ? A_Args[2] : ""
 
 ; Settings INI file
 progToast.nextStep("Settings file")
@@ -20,8 +20,8 @@ machineInfo := selectSettings(machineChoice)
 if(!machineInfo)
 	ExitApp
 iniPath := ahkRootPath "\config\settings.ini"
-IniWrite(iniPath, "Main", "CONTEXT", machineInfo["NEW_CONTEXT"])
-IniWrite(iniPath, "Main", "MACHINE", machineInfo["NEW_MACHINE"])
+IniWrite(machineInfo["NEW_CONTEXT"], iniPath, "Main", "CONTEXT")
+IniWrite(machineInfo["NEW_MACHINE"], iniPath, "Main", "MACHINE")
 
 ; Library pointer script
 progToast.nextStep("Library pointer script")
@@ -41,10 +41,8 @@ if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.
 	progToast.nextStep("Hiding .git files and folders")
 	For _,name in [".git", ".gitignore", ".gitattributes"] {
-		Loop, Files, %ahkRootPath%\*%name%, RDF
-		{
-			FileSetAttrib, +H, %A_LoopFileFullPath%
-		}
+		Loop Files, ahkRootPath "\*" name, "RDF"
+			FileSetAttrib("+H", A_LoopFileFullPath)
 	}
 }
 
@@ -54,7 +52,7 @@ progToast.finish()
 if(useSlimMode) {
 	; From https://www.autohotkey.com/board/topic/77272-close-all-ahk-scripts-except-one/
 	For process in ComObjGet("winmgmts:").ExecQuery("Select * from Win32_Process where name LIKE 'Autohotkey%.exe' and not CommandLine like '%" "firstSetup.ahk" "%' ")
-		Process, Close, % process.ProcessId
+		ProcessClose(process.ProcessId)
 }
 
 if(useSlimMode || GuiLib.showConfirmationPopup("Run now?"))
@@ -64,10 +62,10 @@ ExitApp
 
 ; Use a Selector to key into the settings we need.
 selectSettings(machineChoice) {
-	s := new Selector().setTitle("Select Machine to set up:")
-	s.addChoice(new SelectorChoice({ NAME:"Home Desktop" , ABBREV:["desk", "HOME_DESKTOP"], NEW_CONTEXT:"HOME", NEW_MACHINE:"HOME_DESKTOP" }))
-	s.addChoice(new SelectorChoice({ NAME:"Home Laptop"  , ABBREV:["hlap", "HOME_LAPTOP" ], NEW_CONTEXT:"HOME", NEW_MACHINE:"HOME_DESKTOP" }))
-	s.addChoice(new SelectorChoice({ NAME:"Work Desktop" , ABBREV:["work", "WORK_DESKTOP"], NEW_CONTEXT:"WORK", NEW_MACHINE:"WORK_DESKTOP" }))
-	s.addChoice(new SelectorChoice({ NAME:"Work VDI"     , ABBREV:["vdi" , "WORK_VDI"    ], NEW_CONTEXT:"WORK", NEW_MACHINE:"WORK_VDI"     }))
+	s := Selector().setTitle("Select Machine to set up:")
+	s.addChoice(SelectorChoice(Map("NAME", "Home Desktop", "ABBREV", ["desk", "HOME_DESKTOP"], "NEW_CONTEXT", "HOME", "NEW_MACHINE", "HOME_DESKTOP")))
+	s.addChoice(SelectorChoice(Map("NAME", "Home Laptop",  "ABBREV", ["hlap", "HOME_LAPTOP"],  "NEW_CONTEXT", "HOME", "NEW_MACHINE", "HOME_DESKTOP")))
+	s.addChoice(SelectorChoice(Map("NAME", "Work Desktop", "ABBREV", ["work", "WORK_DESKTOP"], "NEW_CONTEXT", "WORK", "NEW_MACHINE", "WORK_DESKTOP")))
+	s.addChoice(SelectorChoice(Map("NAME", "Work VDI",     "ABBREV", ["vdi",  "WORK_VDI"],     "NEW_CONTEXT", "WORK", "NEW_MACHINE", "WORK_VDI")))
 	return s.select(machineChoice)
 }

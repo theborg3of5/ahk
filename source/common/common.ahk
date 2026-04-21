@@ -75,7 +75,6 @@ A_WorkingDir := A_ScriptDir
 	#Include enums.ahk
 	#Include scriptTrayInfo.ahk
 	#Include titleMatchMode.ahk
-	#Include VA.ahk
 	#Include windowActions.ahk
 	#Include windowPositions.ahk
 ;endregion Includes

@@ -86,7 +86,7 @@ class OneNote {
 	;                 appear afterwards (if we pasted recently).
 	;---------
 	static escapePastePopup() {
-		if(!ControlGet("Hwnd", , "OOCWindow1", A))
+		if(!ControlGetHwnd("OOCWindow1", "A"))
 			return
 
 		Send("{Space}{Backspace}")

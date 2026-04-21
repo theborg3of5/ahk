@@ -391,9 +391,9 @@ class Selector {
 	;                      settings[name] := value
 	;---------
 	updateSettings(settings) {
-		For name,value in settings {
+		For settingName,value in settings {
 			; These map to the settingRow section in my TableList language definition.
-			Switch name {
+			Switch settingName {
 				Case "WindowTitle":    this._windowTitle := value
 				Case "MinColumnWidth": this._minColumnWidth := value
 			}

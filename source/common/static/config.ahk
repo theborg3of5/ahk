@@ -172,13 +172,13 @@ class Config {
 	; RETURNS:        The WindowInfo instance matching the specified window.
 	;---------
 	static findWindowInfo(titleString) {
-		exe   := WinGetProcessPath(titleString)
-		class := WinGetClass(titleString)
-		title := WinGetTitle(titleString)
+		exe      := WinGetProcessPath(titleString)
+		winClass := WinGetClass(titleString)
+		title    := WinGetTitle(titleString)
 
 		bestMatch := ""
 		for _, winInfo in this.windows {
-			if !winInfo.windowMatchesPieces(exe, class, title)
+			if !winInfo.windowMatchesPieces(exe, winClass, title)
 				continue
 
 			if (bestMatch != "") && bestMatch.priority < winInfo.priority
@@ -224,13 +224,13 @@ class Config {
 	;                    matchingNames[priority] := [name1, name2]
 	;---------
 	static findAllMatchingWindowNames(titleString) {
-		exe   := WinGetProcessPath(titleString)
-		class := WinGetClass(titleString)
-		title := WinGetTitle(titleString)
+		exe      := WinGetProcessPath(titleString)
+		winClass := WinGetClass(titleString)
+		title    := WinGetTitle(titleString)
 
 		matchingNames := Map()
 		for _, winInfo in this.windows {
-			if winInfo.windowMatchesPieces(exe, class, title) {
+			if winInfo.windowMatchesPieces(exe, winClass, title) {
 				priority := winInfo.priority
 				if !matchingNames.Has(priority)
 					matchingNames[priority] := [winInfo.name]

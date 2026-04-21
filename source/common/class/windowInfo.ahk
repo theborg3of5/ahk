@@ -85,10 +85,10 @@ class WindowInfo {
 	; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
 	;---------
 	windowMatches(titleString) {
-		exe   := WinGetProcessName(titleString)
-		class := WinGetClass(titleString)
-		title := WinGetTitle(titleString)
-		return this.windowMatchesPieces(exe, class, title)
+		exe      := WinGetProcessName(titleString)
+		winClass := WinGetClass(titleString)
+		title    := WinGetTitle(titleString)
+		return this.windowMatchesPieces(exe, winClass, title)
 	}
 	
 	;---------
@@ -128,22 +128,22 @@ class WindowInfo {
 	; DESCRIPTION:    Check whether the given info matches what we have here.
 	; PARAMETERS:
 	;  exe   (I,OPT) - Window exe
-	;  class (I,OPT) - Window class
-	;  title (I,OPT) - Window title
+	;  winClass (I,OPT) - Window class
+	;  title    (I,OPT) - Window title
 	; RETURNS:        true/false - did all of the pieces match?
 	; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
 	;---------
-	windowMatchesPieces(exe := "", class := "", title := "") {
+	windowMatchesPieces(exe := "", winClass := "", title := "") {
 		; Since the input EXE is the full path, trim it down to just the EXE if we're doing an exact match.
 		if(this.titleMatchMode = TitleMatchMode.Exact)
 			SplitPath(exe, &exe)
-		
+
 		; Check EXE, if we have it specified
 		if(this.exe && !TitleMatchMode.matches(exe, this.exe, this.titleMatchMode))
 			return false
-		
+
 		; Check class, if we have it specified
-		if(this.class && !TitleMatchMode.matches(class, this.class, this.titleMatchMode))
+		if(this.class && !TitleMatchMode.matches(winClass, this.class, this.titleMatchMode))
 			return false
 		
 		; Title is checked based on titleMatchMode, if we have it specified

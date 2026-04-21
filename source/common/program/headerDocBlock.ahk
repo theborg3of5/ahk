@@ -42,8 +42,8 @@ class HeaderDocBlock {
 	; RETURNS:        The wrapped and indented string for this documentation block
 	;---------
 	getWrappedString() {
-		leadingWidth := (this.outerRest this.innerRest).width(settings.tabWidth) ; Use the "rest" instead of the first line as the first line may not include indentation.
-		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, this.WRAP_WIDTH - leadingWidth, settings.tabWidth)
+		leadingWidth := (this.outerRest this.innerRest).width(this.settings.tabWidth) ; Use the "rest" instead of the first line as the first line may not include indentation.
+		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, this.WRAP_WIDTH - leadingWidth, this.settings.tabWidth)
 
 		; Rebuild each line with its leading indentation and keywords.
 		docString := ""

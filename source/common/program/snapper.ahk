@@ -276,7 +276,7 @@
 		if(!Config.windowInfo["Snapper"].exists())
 			return ""
 		
-		environmentText := ControlGetText("ThunderRT6ComboBox2", titleString)
+		environmentText := ControlGetText("ThunderRT6ComboBox2", Config.windowInfo["Snapper"].titleString)
 		commId := environmentText.firstBetweenStrings("[", "]")
 		
 		return commId

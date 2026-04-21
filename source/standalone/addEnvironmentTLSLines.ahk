@@ -2,7 +2,7 @@
 
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
-A_FileEncoding := "UTF-8" ; Read files in UTF-8 encoding by default to handle special characters.
+FileEncoding("UTF-8") ; Read files in UTF-8 encoding by default to handle special characters.
 
 progToast := ProgressToast("Adding exported environment TLS lines").blockingOn()
 

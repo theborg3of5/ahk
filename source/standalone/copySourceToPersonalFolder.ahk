@@ -41,7 +41,7 @@ For _, destination in folders {
 progToast.nextStep("Copying files from source to destination")
 gitNames := [".git", ".gitignore", ".gitattributes"]
 For source, destination in folders {
-	A_WorkingDir := source ; Set working directory and use a relative file pattern so that A_LoopFilePath has only the folders at the start for FileCopy.
+	SetWorkingDir(source) ; Set working directory and use a relative file pattern so that A_LoopFilePath has only the folders at the start for FileCopy.
 	Loop Files, "*", "FDR" ; All files and folder, recursing into folders
 	{
 		; Don't copy over git-related files/folders.

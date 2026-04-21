@@ -12,7 +12,7 @@
 */
 
 ; Start in the relevant folder.
-A_WorkingDir := Config.path["EPICSTUDIO_GLOBAL_HIGHLIGHTS"]
+SetWorkingDir(Config.path["EPICSTUDIO_GLOBAL_HIGHLIGHTS"])
 
 ; Loop over all .bits files and compile them into .regex files.
 Loop Files, "*.bits"

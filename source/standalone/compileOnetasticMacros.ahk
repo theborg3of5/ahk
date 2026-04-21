@@ -31,7 +31,7 @@ global TemplateXML_Parameter := "<Param byref=""<PRM_IS_BYREF>"" name=""<PRM_NAM
 
 
 ; Start in the relevant folder.
-A_WorkingDir := Config.path["ONETASTIC_MACROS"]
+SetWorkingDir(Config.path["ONETASTIC_MACROS"])
 
 ; Loop over the macro XML files (containing their inner XML) and compile them into full, importable macro XMLs
 pt := ProgressToast("Compiling Onetastic macros").blockingOn()

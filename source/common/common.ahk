@@ -1,6 +1,6 @@
 ;region Basic settings for all scripts
 #SingleInstance
-A_WorkingDir := A_ScriptDir
+SetWorkingDir(A_ScriptDir)
 ;endregion Basic settings for all scripts
 
 ;region Prototype extensions (self-installing)

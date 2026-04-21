@@ -1,7 +1,7 @@
 ; Reformat all TL and TLS files in the AHK root folder and below, to my personally preferred standard.
 
 #Include <includeCommon>
-A_FileEncoding := "UTF-8" ; Read files in UTF-8 encoding by default to handle special characters.
+FileEncoding("UTF-8") ; Read files in UTF-8 encoding by default to handle special characters.
 
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
 global TAB_WIDTH := VSCode.TabWidth ; Match VSCode since that's where we're editing these

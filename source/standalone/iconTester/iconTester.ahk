@@ -10,7 +10,7 @@ global t          ; Toast object for showing the current icon
 
 
 ; Find all icons in sub-folder, track their paths in an array by number
-A_WorkingDir := A_ScriptDir
+SetWorkingDir(A_ScriptDir)
 iconsAry := []
 iconsAry[0] := A_IconFile ; Entry 0 is the original icon for the script
 Loop Files, "*.*"

@@ -7,7 +7,7 @@
 ScriptTrayInfo.Init("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Main)
 
-A_WorkingDir := A_ScriptDir                  ; Ensures a consistent starting directory.
+SetWorkingDir(A_ScriptDir)                   ; Ensures a consistent starting directory.
 A_DetectHiddenWindows := true                ; Do search hidden windows
 SetTitleMatchMode(TitleMatchMode.Contains)   ; Match text anywhere inside window titles
 SetCapsLockState("AlwaysOff")                ; Turn off Caps Lock so it can be used as a hotkey. Keep these three lock states in sync with afterUnsuspend() below.

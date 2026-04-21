@@ -25,7 +25,7 @@ class TempSettings {
 		if this._trayIcon != ""
 			TraySetIcon(this._trayIcon, this._trayIconNum)
 		if this._workingDirectory != ""
-			A_WorkingDir := this._workingDirectory
+			SetWorkingDir(this._workingDirectory)
 	}
 	
 	;---------
@@ -132,7 +132,7 @@ class TempSettings {
 		if this._workingDirectory = ""
 			this._workingDirectory := A_WorkingDir
 
-		A_WorkingDir := new
+		SetWorkingDir(new)
 		return this
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------

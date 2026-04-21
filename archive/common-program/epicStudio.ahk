@@ -43,10 +43,9 @@ class EpicStudio {
 	getClipboardAsMString() {
 		clip := clipboard
 		
-		QUOTE := """" ; Double-quote character
-		clip := StringLib.escapeCharUsingChar(clip, QUOTE, QUOTE)
+		clip := StringLib.escapeCharUsingChar(clip, '"', '"')
 		
-		return QUOTE clip QUOTE
+		return '"' clip '"'
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 		

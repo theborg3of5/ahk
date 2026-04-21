@@ -146,14 +146,12 @@ class SearchLib {
 	;  isRegex      (I,OPT) - Pass 1 to treat the search term as a regular expression.
 	;---------
 	static grepWin(searchTerm, pathToSearch, isRegex := false) {
-		QUOTE := """" ; Double-quote character
-		
 		pathToSearch := Config.replacePathTags(pathToSearch) ; Escape any quotes in the search string
-		searchTerm := StringLib.escapeCharUsingChar(searchTerm, QUOTE)
+		searchTerm := StringLib.escapeCharUsingChar(searchTerm, '"')
 		
 		args := isRegex ? "/regex:yes" : "/regex:no"
-		args .= " /searchpath:" QUOTE pathToSearch " " QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
-		args .= " /searchfor:"  QUOTE searchTerm       QUOTE
+		args .= " /searchpath:" '"' pathToSearch " " '"' ; Extra space after path, otherwise trailing backslash escapes ending double quote
+		args .= " /searchfor:"  '"' searchTerm       '"'
 		args .= " /execute" ; Run it immediately if we got what to search for
 		
 		; Debug.popup("Path to search",pathToSearch, "To search",searchTerm, "Args",args)
@@ -178,10 +176,8 @@ class SearchLib {
 	; RETURNS:        The string, encoded and with double quotes escaped.
 	;---------
 	static escapeTermForRunURL(stringToEscape) {
-		QUOTE := """" ; Double-quote character
-		
 		encodedString := StringLib.encodeForURL(stringToEscape)
-		encodedString := StringLib.escapeCharUsingChar(encodedString, QUOTE, QUOTE QUOTE) ; Escape double-quotes twice - extra to get us past the windows run command stripping them out.
+		encodedString := StringLib.escapeCharUsingChar(encodedString, '"', '"' '"') ; Escape double-quotes twice - extra to get us past the windows run command stripping them out.
 		
 		return encodedString
 	}

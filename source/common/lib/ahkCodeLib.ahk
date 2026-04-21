@@ -139,7 +139,6 @@ class AHKCodeLib {
 			return ""
 		
 		paramsString := ""
-		QUOTE := """" ; Double-quote character
 		
 		; Split list into array
 		paramsAry := AHKCodeLib.splitVarList(varList)
@@ -147,12 +146,12 @@ class AHKCodeLib {
 		; Special case: if first param starts with +, it's a subtitle that doesn't need a corresponding value parameter.
 		if(paramsAry[1].startsWith("+")) {
 			label := paramsAry.RemoveAt(1)
-			paramsString .= QUOTE label QUOTE
+			paramsString .= '"' label '"'
 		}
 		
 		For i,param in paramsAry {
-			label := StringLib.escapeCharUsingChar(param, QUOTE, QUOTE)
-			paramPair := QUOTE label QUOTE "," param
+			label := StringLib.escapeCharUsingChar(param, '"', '"')
+			paramPair := '"' label '"' "," param
 			paramsString := paramsString.appendPiece(", ", paramPair)
 		}
 		
@@ -167,15 +166,14 @@ class AHKCodeLib {
 	; RETURNS:        A list of the original parameters.
 	;---------
 	static reduceDebugParams(debugParamList) {
-		QUOTE := """" ; Double-quote character
 		debugParamsAry := AHKCodeLib.splitVarList(debugParamList)
 		paramsAry := []
 		
 		; Special case: a first parameter with a + prefix is a subtitle, just add it as-is (don't try to pair
 		; it with the next parameter).
-		if(debugParamsAry[1].startsWith(QUOTE "+")) {
+		if(debugParamsAry[1].startsWith('"' "+")) {
 			title := debugParamsAry.RemoveAt(1)
-			title := title.removeFromStart(QUOTE).removeFromEnd(QUOTE)
+			title := title.removeFromStart('"').removeFromEnd('"')
 			paramsAry.push(title)
 		}
 		
@@ -200,7 +198,6 @@ class AHKCodeLib {
 		if(varList = "")
 			return []
 		
-		QUOTE := """" ; Double-quote character
 		paramsAry := []
 		
 		currentName  := ""
@@ -211,7 +208,7 @@ class AHKCodeLib {
 		{
 			char := A_LoopField
 
-			if(char = QUOTE)
+			if(char = '"')
 				openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
 			
 			; Track open parens and brackets (but only if quotes aren't currently open).

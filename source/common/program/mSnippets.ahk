@@ -283,12 +283,10 @@ class MSnippets {
 		value        := inputAry.RemoveAt(1)
 		indexList    := inputAry.join(",")
 
-		QUOTE := """"
-
 		if(arrayGloName.startsWith("@"))
 			arrayGloName := arrayGloName.appendIfMissing("@") ; End global references with the proper @ if they're not already.
 		if(!value.isNum())
-			value := QUOTE value QUOTE ; Wrap non-numeric values in quotes.
+			value := '"' value '"' ; Wrap non-numeric values in quotes.
 		indexAry := FormattedList(indexList).getList(FormattedList.Format_Array) ; This handles expanding ranges and the like.
 		
 		lineBase := Config.private["M_SET_ARRAY_LINE"]
@@ -297,7 +295,7 @@ class MSnippets {
 		aryString := ""
 		For _,index in indexAry {
 			if(!index.isNum())
-				index := QUOTE index QUOTE ; Wrap non-numeric indices in quotes.
+				index := '"' index '"' ; Wrap non-numeric indices in quotes.
 			line := lineBase.replaceTags(Map("ARRAY_NAME", arrayGloName, "INDEX", index, "VALUE", value))
 			aryString := aryString.appendPiece(newLine, line)
 		}
@@ -318,8 +316,6 @@ class MSnippets {
 		arrayGloName := inputAry.RemoveAt(1)
 		valuesList   := inputAry.join(",")
 
-		QUOTE := """"
-
 		if(arrayGloName.startsWith("@"))
 			arrayGloName := arrayGloName.appendIfMissing("@") ; End global references with the proper @ if they're not already.
 		valuesAry := FormattedList(valuesList).getList(FormattedList.Format_Array) ; This handles expanding ranges and the like.
@@ -330,7 +326,7 @@ class MSnippets {
 		aryString := lineBase.replaceTags(Map("ARRAY_NAME", arrayGloName, "INDEX", 0, "VALUE", valuesAry.Length))
 		For ln,value in valuesAry {
 			if(!value.isNum())
-				value := QUOTE value QUOTE ; Wrap non-numeric values in quotes.
+				value := '"' value '"' ; Wrap non-numeric values in quotes.
 			line := lineBase.replaceTags(Map("ARRAY_NAME", arrayGloName, "INDEX", ln, "VALUE", value))
 			aryString := aryString.appendPiece(newLine, line)
 		}

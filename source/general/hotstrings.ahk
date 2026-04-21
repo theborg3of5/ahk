@@ -193,9 +193,7 @@
 
 ;region Helper functions
 sendArbitraryDate(format) {
-	QUOTE := """"
-	
-	title := "Insert date in " QUOTE format.remove("``") QUOTE " format:"
+	title := "Insert date in " '"' format.remove("``") '"' " format:"
 	dateString := InputBox(title, "Enter a relative date string to insert that date in the above format.", , 425, 125)
 	if(dateString = "")
 		return ""
@@ -203,9 +201,7 @@ sendArbitraryDate(format) {
 	RelativeDate(dateString).sendInFormat(format)
 }
 sendArbitraryTime(format) {
-	QUOTE := """"
-	
-	title := "Insert date in " QUOTE format.remove("``") QUOTE " format:"
+	title := "Insert date in " '"' format.remove("``") '"' " format:"
 	timeString := InputBox(title, "Enter a relative time string to insert that time in the above format.", , 425, 125)
 	if(timeString = "")
 		return ""

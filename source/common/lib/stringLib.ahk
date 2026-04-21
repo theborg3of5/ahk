@@ -22,8 +22,7 @@ class StringLib {
 	; RETURNS:        Quoted string
 	;---------
 	static escapeAndQuote(inputString) {
-		QUOTE := """" ; A single double-quote character
-		return QUOTE this.escapeCharUsingChar(inputString, QUOTE, QUOTE) QUOTE
+		return '"' this.escapeCharUsingChar(inputString, '"', '"') '"'
 	}
 	
 	;---------

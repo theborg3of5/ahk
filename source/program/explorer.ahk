@@ -21,7 +21,7 @@
 			if(!folderPath)
 				return
 			
-			Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " folderPath)
+			Config.activateProgram("Windows Terminal", '--profile "Git Bash" --startingDirectory ' folderPath)
 		}
 	
 #HotIf Config.isWindowActive("Explorer") || WinActive("ahk_class Progman ahk_exe explorer.exe") ; Explorer window or Desktop

@@ -78,7 +78,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				if(path = "LAUNCH")
 					path := "C:\EpicSource"
 				
-				Config.runProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " path)
+				Config.runProgram("Windows Terminal", '--profile "Git Bash" --startingDirectory ' path)
 			}
 		}
 	

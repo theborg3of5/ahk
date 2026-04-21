@@ -42,7 +42,7 @@ if(!useSlimMode) {
 	progToast.nextStep("Hiding .git files and folders")
 	For _,name in [".git", ".gitignore", ".gitattributes"] {
 		Loop Files, ahkRootPath "\*" name, "RDF"
-			FileSetAttrib("+H", A_LoopFileFullPath)
+			FileSetAttrib("+H", A_LoopFilePath)
 	}
 }
 

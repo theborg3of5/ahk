@@ -233,7 +233,7 @@ class Explorer {
 			if (A_LoopFileExt == "lnk")
 				Continue
 
-			FileSetAttrib("+H", A_LoopFileFullPath)
+			FileSetAttrib("+H", A_LoopFilePath)
 		}
 
 		; Refresh to drop the hidden files out of view

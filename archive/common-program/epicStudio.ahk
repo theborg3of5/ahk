@@ -41,7 +41,7 @@ class EpicStudio {
 	}
 	
 	getClipboardAsMString() {
-		clip := clipboard
+		clip := A_Clipboard
 		
 		clip := StringLib.escapeCharUsingChar(clip, '"', '"')
 		
@@ -83,7 +83,7 @@ class EpicStudio {
 		if(!EpicStudio.copyCodeLocation())
 			return
 		
-		codeLocation := clipboard
+		codeLocation := A_Clipboard
 		
 		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
@@ -108,7 +108,7 @@ class EpicStudio {
 		
 		; While the RTF link is on the clipboard, it doesn't paste cleanly into places like OneNote, so
 		; generate the link and do our newline-separated thing instead.
-		location := clipboard
+		location := A_Clipboard
 		link := new ActionObjectEpicStudio(location, ActionObjectEpicStudio.DescriptorType_Routine).getLink()
 		locationAndLink := location.appendLine(link)
 		

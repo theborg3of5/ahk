@@ -28,14 +28,14 @@ progToast.nextStep("Main repo")
 root := Config.path["AHK_ROOT"]
 Loop Files, root "\*.tl*", "RF"
 {
-	reformatFile(A_LoopFileFullPath)
+	reformatFile(A_LoopFilePath)
 }
 
 progToast.nextStep("Private repo")
 root := Config.path["AHK_PRIVATE"]
 Loop Files, root "\*.tl*", "RF"
 {
-	reformatFile(A_LoopFileFullPath)
+	reformatFile(A_LoopFilePath)
 }
 
 progToast.finish()

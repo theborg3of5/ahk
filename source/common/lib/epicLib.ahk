@@ -154,7 +154,7 @@ class EpicLib {
 			
 			if(A_LoopFileName > latestVersion) {
 				latestVersion := A_LoopFileName
-				latestPath := A_LoopFileLongPath
+				latestPath := A_LoopFileFullPath
 			}
 		}
 		
@@ -172,13 +172,13 @@ class EpicLib {
 		Loop Files, "C:\Program Files (x86)\Epic\v*.*", "D"
 		{
 			; Only consider versions where there's an EMC2 directory
-			if(!FileLib.folderExists(A_LoopFileLongPath "\EMC2"))
+			if(!FileLib.folderExists(A_LoopFileFullPath "\EMC2"))
 				Continue
 			
 			version := A_LoopFileName.removeFromStart("v")
 			if(version > latestVersion) {
 				latestVersion := version
-				latestEMC2Folder := A_LoopFileLongPath "\EMC2"
+				latestEMC2Folder := A_LoopFileFullPath "\EMC2"
 			}
 		}
 			
@@ -197,7 +197,7 @@ class EpicLib {
 			version := A_LoopFileName.removeFromStart("v")
 
 			; Only consider versions where there's an executable (aka the version is actually installed)
-			if(!FileExist(A_LoopFileLongPath "\Shared Files\EpicD" version.remove(".") ".exe"))
+			if(!FileExist(A_LoopFileFullPath "\Shared Files\EpicD" version.remove(".") ".exe"))
 				Continue
 			
 			if(version > latestVersion)
@@ -460,7 +460,7 @@ class EpicLib {
 			if (!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
 				Continue
 			
-			versionFolderPath := A_LoopFileLongPath
+			versionFolderPath := A_LoopFileFullPath
 			Loop Files, versionFolderPath "\*", "D"
 			{
 				folderName := A_LoopFileName
@@ -503,7 +503,7 @@ class EpicLib {
 
 				if(!folders.Has(cat))
 					folders[cat] := []
-				folders[cat].push({ folderName:folderName, path:A_LoopFileLongPath, abbrev:abbrev })
+				folders[cat].push({ folderName:folderName, path:A_LoopFileFullPath, abbrev:abbrev })
 			}
 		}
 
@@ -516,7 +516,7 @@ class EpicLib {
 
 			if(!folders.Has(cat))
 				folders[cat] := []
-			folders[cat].push({ folderName:folderName, path:A_LoopFileLongPath, abbrev:abbrev })
+			folders[cat].push({ folderName:folderName, path:A_LoopFileFullPath, abbrev:abbrev })
 		}
 
 		; Also pull from the cloudlab folder
@@ -528,7 +528,7 @@ class EpicLib {
 			
 			if(!folders.Has(cat))
 				folders[cat] := []
-			folders[cat].push({ folderName:folderName, path:A_LoopFileLongPath, abbrev:abbrev })
+			folders[cat].push({ folderName:folderName, path:A_LoopFileFullPath, abbrev:abbrev })
 		}
 
 		s := Selector().setTitle(title).setIcon(icon)

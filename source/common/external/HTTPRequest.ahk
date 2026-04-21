@@ -462,7 +462,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 			; is necessary for the overhauled Content-MD5.
 				Loop, % A_LoopField, 0, 0
 				{
-					Upload_File_Path := A_LoopFileFullPath ; the file loop verifies that the target is a FILE
+					Upload_File_Path := A_LoopFilePath ; the file loop verifies that the target is a FILE
 				; CreateFile > http://msdn.microsoft.com/en-us/library/aa363858%28v=vs.85%29.aspx
 					If !( Do_File_Upload := DllCall( "CreateFile" W_A, Ptr, &Upload_File_Path, DW, 0x80000000, DW, 0, Ptr, 0, DW, 4, DW, 0, Ptr, 0, Ptr ) )
 						MyErrors .= swp 'opening the file to upload "' Upload_File_Path '". 'CreateFile" W_A "' failed" sel ErrorLevel sle A_LastError "`n"

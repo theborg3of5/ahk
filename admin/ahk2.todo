@@ -517,9 +517,9 @@
 			Inline:
 				☐ A_TimeSincePriorHotkey returns "" instead of -1 when A_PriorHotkey is "" (same for A_TimeSinceThisHotkey and A_ThisHotkey)
 			Renamed:
-				☐ A_LoopFileFullPath => A_LoopFilePath
-				☐ A_LoopFileLongPath => A_LoopFileFullPath
-				☐ Clipboard => A_Clipboard
+				✔ A_LoopFileFullPath => A_LoopFilePath @done(26-04-21 13:12)
+				✔ A_LoopFileLongPath => A_LoopFileFullPath @done(26-04-21 13:12)
+				✔ Clipboard => A_Clipboard @done(26-04-21 13:14)
 			Removed:
 				☐ ClipboardAll (replaced with the ClipboardAll function)
 				☐ ComSpec (use A_ComSpec)

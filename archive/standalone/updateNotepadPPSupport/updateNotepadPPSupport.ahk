@@ -116,7 +116,7 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup) {
 	; Loop over all scripts in folder to find classes
 	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{
-		linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath, true)
+		linesAry := FileLib.fileLinesToArray(A_LoopFileFullPath, true)
 		
 		tlBlockOn := false
 		ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).

@@ -3,7 +3,7 @@
 ; Populate the clipboard from an input box.
 !v::
 	setClipboard(*) {
-		text := InputBox("Set clipboard", "Enter text to set the clipboard to:")
+		text := InputBox("Set clipboard", "Enter text to set the clipboard to:").Value
 		if (text)
 			ClipboardLib.setAndToast(text, "value")
 	}

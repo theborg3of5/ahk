@@ -51,7 +51,7 @@
 	::;je :: ; Include a space so default use of macro (to jump into list) doesn't trigger this
 		examineJob(*) {
 			; Prompt for process ID
-			jobId := InputBox("Enter process ID to look up", "Enter job process ID")
+			jobId := InputBox("Enter process ID to look up", "Enter job process ID").Value
 			if(jobId = "")
 				return
 

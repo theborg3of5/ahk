@@ -26,7 +26,7 @@ class Putty {
 	;---------
 	static insertArbitraryText() {
 		; Popup to get the text.
-		textIn := InputBox("Insert text (without overwriting)", , , 500, 100)
+		textIn := InputBox( , "Insert text (without overwriting)", "w500 h100").Value
 		if(textIn = "")
 			return
 

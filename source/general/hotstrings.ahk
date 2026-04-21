@@ -182,7 +182,7 @@
 ;region Useful strings
 :X:.ruler::
 	sendRulerString(*) {
-		length := InputBox("Insert Ten-String", "How long can your text be?")
+		length := InputBox("Insert Ten-String", "How long can your text be?").Value
 		if(!length)
 			return
 		
@@ -194,7 +194,7 @@
 ;region Helper functions
 sendArbitraryDate(dateFormat) {
 	title := "Insert date in " '"' dateFormat.remove("``") '"' " format:"
-	dateString := InputBox(title, "Enter a relative date string to insert that date in the above format.", , 425, 125)
+	dateString := InputBox(title, "Enter a relative date string to insert that date in the above format.", "w425 h125").Value
 	if(dateString = "")
 		return ""
 	
@@ -202,7 +202,7 @@ sendArbitraryDate(dateFormat) {
 }
 sendArbitraryTime(timeFormat) {
 	title := "Insert date in " '"' timeFormat.remove("``") '"' " format:"
-	timeString := InputBox(title, "Enter a relative time string to insert that time in the above format.", , 425, 125)
+	timeString := InputBox(title, "Enter a relative time string to insert that time in the above format.", "w425 h125").Value
 	if(timeString = "")
 		return ""
 	

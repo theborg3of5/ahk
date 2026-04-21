@@ -98,7 +98,7 @@ class VSCode {
 		if(functionName = "")
 			return
 
-		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , defaultVarList)
+		varList := InputBox( , "Enter variables to send debug string for", "w500 h100", defaultVarList).Value
 		if(ErrorLevel) ; Popup was cancelled or timed out
 			return
 

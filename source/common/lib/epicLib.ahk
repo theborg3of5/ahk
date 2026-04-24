@@ -498,8 +498,8 @@ class EpicLib {
 				}
 
 				; Extra name cleanup
-				if (A_LoopFileName.contains("-Merge-To-")) ; Using original name since we're modifying the name var above
-					name := name.beforeString("-Merge-To-") " (Merge)"
+				if (A_LoopFileName.contains("-MFIN")) ; Using original name since we're modifying the name var above
+					name := name " (Merge)"
 
 				if(!folders[cat])
 					folders[cat] := []

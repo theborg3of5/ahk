@@ -11,6 +11,7 @@
 			GitHub Desktop				-				-				1440		900
 			GrepWin						-				-				1440		900
 			Steam						-				-				1440		900			HOME
+			Snapper
 			Teams						-				-				1440		900			WORK
 			TickTick					RIGHT_EDGE		TOP_EDGE		1200		100%
 			Putty						RIGHT_EDGE		TOP_EDGE		1350		100%		WORK

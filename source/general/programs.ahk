@@ -19,6 +19,7 @@
 	^!+e:: Config.activateProgram("EMC2", "EMC2Update") ; EMC2 needs this parameter to start up correctly.
 	^!+s:: VSCode.activateCode("EpicCode", Config.path["USER_ROOT"] "\EpicCode\EpicCode.code-workspace")
 	^!+u:: Config.activateProgram("Thunder")
+	^!+x:: VSCode.activateCode("VSCode", "--profile EpicCode --folder-uri file:///" Config.path["EPIC_SOURCE_SERVER"] "\XGDB")
 	^!#+v::Config.runProgram("Visual Studio")
 #If
 

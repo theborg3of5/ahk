@@ -119,6 +119,15 @@ class Outlook {
 
 		return this.cleanUpTitle(title)
 	}
+
+	;---------
+	; DESCRIPTION:    Copy the EMC2 record ID from the current window title to the clipboard.
+	;---------
+	copyEMC2RecordIDFromTitle() {
+		ao := new ActionObjectEMC2(this.getMessageTitle())
+		
+		ClipboardLib.setAndToast(ao.id, ao.ini " ID")
+	}
 	
 	;---------
 	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected (non-TLG) calendar event to the clipboard.

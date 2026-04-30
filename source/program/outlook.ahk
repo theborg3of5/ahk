@@ -38,6 +38,7 @@
 #If Config.isWindowActive("Outlook") && (Outlook.isCurrentScreenMail() || Outlook.isMailMessagePopupActive())
 	; Copy current message title to clipboard
 	!c::ClipboardLib.setAndToast(Outlook.getMessageTitle(), "title")
+	^!c::Outlook.copyEMC2RecordIDFromTitle()
 	
 	; Open the relevant record (if applicable) for the current message
 	!w::new ActionObjectEMC2(Outlook.getMessageTitle()).openWeb()

@@ -11,15 +11,19 @@ class VSCode {
 	; PARAMETERS:
 	;  profileName   (I,REQ) - Name of the profile
 	;                          We assume that there's also a window name of "VSCode <profileName>"
-	;  workspacePath (I,OPT) - If it should launch with a specific workspace file, the full path to that file.
+	;  runParams     (I,OPT) - If it should be run (if not found) with any additional parameters, pass those here.
 	;---------
-	activateCode(profileName, workspacePath := "") {
+	activateCode(profileName, runParams := "") {
 		windowName := "VSCode " profileName
 		
-		if (Config.doesWindowExist(windowName))
+		winId := Config.doesWindowExist(windowName)
+		if (Config.findWindowName("ahk_id " winId) != windowName) ; Make sure this isn't a more-specific VSCode instance (like EpicCode vs EpicCode DLG)
+			winId := ""
+
+		if (winId != "")
 			WindowActions.activateWindowByName(windowName)
 		else
-			Config.runProgram("VSCode", "--profile " profileName " " workspacePath)
+			Config.runProgram("VSCode", "--profile " profileName " " runParams)
 	}
 
 	;---------

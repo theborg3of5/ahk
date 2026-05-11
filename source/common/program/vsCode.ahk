@@ -163,6 +163,7 @@ class VSCode {
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
 	copyCleanEpicCodeLocation() {
+		HotkeyLib.releaseAllModifiers()
 		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
 		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
 		
@@ -184,6 +185,7 @@ class VSCode {
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
 	copyEpicRoutineName() {
+		HotkeyLib.releaseAllModifiers()
 		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
 		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
 		

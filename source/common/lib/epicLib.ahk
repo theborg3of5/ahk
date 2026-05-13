@@ -531,6 +531,9 @@ class EpicLib {
 			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 		}
 
+		; Reverse the order of the SUs, so the more recent-version ones come first
+		folders["SUs"] := DataLib.reverseArray(folders["SUs"])
+
 		s := new Selector().setTitle(title).setIcon(icon)
 		this.addFolderChoicesForType(s, folders, "Known DLGs")
 		this.addFolderChoicesForType(s, folders, "Other Current DLGs")

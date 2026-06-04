@@ -498,7 +498,7 @@ class EpicLib {
 				}
 
 				; Extra name cleanup
-				if (A_LoopFileName.contains("-MFIN")) ; Using original name since we're modifying the name var above
+				if (A_LoopFileName.containsAnyOf(["-MFIN", "-MST2"])) ; Using original name since we're modifying the name var above
 					name := name " (Merge)"
 
 				if(!folders[cat])

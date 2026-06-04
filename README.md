@@ -3,10 +3,9 @@ A repository for my personal AutoHotkey library.
 
 # Directory Structure
 ```
+README.md                        # This file
 .claude/
-├── README.md                    # This file
 ├── settings.local.json          # Local permissions configuration
-├── commands/                    # Slash commands
 admin/                           # To-do files and VSCode workspace file
 config/                          # Various settings files, mostly TableList files (TL/TLS extension, see below)
 icons/                           # Icons used by various scripts

@@ -7,38 +7,47 @@ class ClipboardLib {
 	;                 take and returning whether we actually got something.
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	; RETURNS:        true if we successfully copied something, false otherwise.
 	;---------
-	copyWithHotkey(hotkeyKeys) {
+	copyWithHotkey(hotkeyKeys, timeout := "") {
 		if(hotkeyKeys = "")
 			return
-		
+		if(timeout = "")
+			timeout := 0.5
+
 		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 		Send, % hotkeyKeys
-		ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
-		
+		if(timeout = -1)
+			ClipWait
+		else
+			ClipWait, % timeout
+
 		return (ErrorLevel != 1)
 	}
 	;---------
 	; DESCRIPTION:    Get some text by copying it to the clipboard using the given hotkey.
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	; RETURNS:        The copied text.
 	;---------
-	getWithHotkey(hotkeyKeys) {
+	getWithHotkey(hotkeyKeys, timeout := "") {
 		if(hotkeyKeys = "")
 			return ""
-		
+
 		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
 		if(Config.isWindowActive("Putty") && !WinActive("PuTTY Reconfiguration"))
 			return Clipboard
-		
+
 		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-		ClipboardLib.copyWithHotkey(hotkeyKeys)
-		
+		ClipboardLib.copyWithHotkey(hotkeyKeys, timeout)
+
 		textFound := Clipboard
 		ClipboardLib.set(origClipboard) ; Restore the original clipboard.
-		
+
 		return textFound
 	}
 	
@@ -92,9 +101,11 @@ class ClipboardLib {
 	;                  * The path has been cleaned up and mapped
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	;---------
-	copyFilePath(hotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+	copyFilePath(hotkeyKeys, timeout := "") {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys, timeout)
 		if(!path) {
 			Toast.ShowError("Could not copy path", "Failed to get file path")
 			return
@@ -109,9 +120,11 @@ class ClipboardLib {
 	;                 it on the clipboard.
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	;---------
-	copyFilePathRelativeToSource(hotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+	copyFilePathRelativeToSource(hotkeyKeys, timeout := "") {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys, timeout)
 		if(!path) {
 			Toast.ShowError("Could not copy source-relative path", "Failed to get file path")
 			return
@@ -126,9 +139,11 @@ class ClipboardLib {
 	;                 the clipboard.
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	;---------
-	copyCodeLocationPath(hotkeyKeys) {
-		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_Path)
+	copyCodeLocationPath(hotkeyKeys, timeout := "") {
+		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_Path, timeout)
 	}
 	
 	;---------
@@ -136,9 +151,11 @@ class ClipboardLib {
 	;                 the clipboard.
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	;---------
-	copyCodeLocationFile(hotkeyKeys) {
-		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_File)
+	copyCodeLocationFile(hotkeyKeys, timeout := "") {
+		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_File, timeout)
 	}
 	
 	;---------
@@ -146,18 +163,21 @@ class ClipboardLib {
 	;                 currently selected text as a function, and puts it on the clipboard.
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	;---------
-	copyCodeLocationRelativeToSource(hotkeyKeys) {
-		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_SourceRelative)
+	copyCodeLocationRelativeToSource(hotkeyKeys, timeout := "") {
+		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_SourceRelative, timeout)
 	}
 
 	;---------
 	; DESCRIPTION:    Open the current file's parent folder in Explorer, using the path of the current file.
 	; PARAMETERS:
 	;  copyFilePathHotkey (I,REQ) - The hotkey to copy the current file's full path in the active window.
+	;  timeout            (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
 	;---------
-	openActiveFileParentFolder(copyFilePathHotkey) {
-		filePath := ClipboardLib.getWithHotkey(copyFilePathHotkey)
+	openActiveFileParentFolder(copyFilePathHotkey, timeout := "") {
+		filePath := ClipboardLib.getWithHotkey(copyFilePathHotkey, timeout)
 		if(!filePath) {
 			Toast.ShowError("Could not open parent folder", "Failed to retrieve current file path")
 			return
@@ -434,17 +454,19 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - Hotkeys to copy the current path to the clipboard.
 	;  pathType   (I,REQ) - What type of path you want, from ClipboardLib.CopyLocationType_* constants.
+	;  timeout    (I,OPT) - Max seconds to wait for the clipboard to be populated. Defaults to 0.5.
+	;                      Pass -1 to wait indefinitely.
 	;---------
-	getCodeLocationCore(hotkeyKeys, pathType) {
+	getCodeLocationCore(hotkeyKeys, pathType, timeout := "") {
 		; Function name comes from selected text (if any)
 		functionName := SelectLib.getText()
 		if(functionName.contains("`n")) ; If there's a newline then nothing was selected, we just copied the whole line.
 			functionName := ""
 		if(functionName != "")
 			functionName .= "()"
-		
+
 		; Get path and extract the piece we actually want.
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		path := ClipboardLib.getWithHotkey(hotkeyKeys, timeout)
 		if(!path) {
 			Toast.showError("Could not get code location", "Failed to get current path")
 			return

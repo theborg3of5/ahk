@@ -164,9 +164,9 @@ class VSCode {
 	;---------
 	copyCleanEpicCodeLocation() {
 		HotkeyLib.releaseAllModifiers()
-		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
+		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
 		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
-		
+
 		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
 		
@@ -186,9 +186,9 @@ class VSCode {
 	;---------
 	copyEpicRoutineName() {
 		HotkeyLib.releaseAllModifiers()
-		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
+		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
 		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
-		
+
 		; Split off the routine
 		EpicLib.splitServerLocation(codeLocation, routine)
 		

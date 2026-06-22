@@ -179,7 +179,7 @@ class OneNoteTodoPage {
 		if(endKey = "Escape")
 			return
 		
-		Send, ^{PgDn} ; Switch to (presumably) new page
+		Send, ^{PgDn 2} ; Switch to (presumably) new page, x2 in case there's an XGDB page there too
 		
 		; Make the current page have no background color.
 		Send, !w

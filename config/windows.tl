@@ -66,6 +66,7 @@
 				Beeper							Beeper.exe					-								-										-				-					HOME_DESKTOP
 				Chrome							chrome.exe					Chrome_WidgetWin_1				- Google Chrome
 				Cisco VPN						csc_ui.exe					-								Cisco Secure Client
+				Claude							claude.exe					Chrome_WidgetWin_1
 				Discord							Discord.exe					-								-										NO_PADDING
 				EMC2							EMC2.+EpicD\d+\.exe			ThunderRT6MDIForm				-										-				REGEX
 				EpicStudio						EpicStudio.exe				-								EpicStudio

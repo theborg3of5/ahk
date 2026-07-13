@@ -38,11 +38,17 @@ class RunLib {
 	; RETURNS:        The output from the command, as passed to standard out.
 	;---------
 	runReturn(command, ByRef stderr := "") {
-		fullCommand := A_ComSpec . " /c """ . command . """"
-		shell := comobjcreate("wscript.shell")
-		exec := (shell.exec(fullCommand))
-		stdout := exec.stdout.readall()
-		stderr := exec.stderr.readall()
+		stdoutFile := A_Temp "\ahk_runReturn_stdout.tmp"
+		stderrFile := A_Temp "\ahk_runReturn_stderr.tmp"
+		
+		fullCommand := A_ComSpec " /c """ command """ >" stdoutFile " 2>" stderrFile
+		RunWait, %fullCommand%,, Hide
+		
+		FileRead, stdout, %stdoutFile%
+		FileRead, stderr, %stderrFile%
+		FileDelete, %stdoutFile%
+		FileDelete, %stderrFile%
+		
 		return stdout
 	}
 

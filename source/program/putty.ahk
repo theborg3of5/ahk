@@ -54,9 +54,25 @@
 			jobId := InputBox("Enter process ID to look up", "Enter job process ID")
 			if(jobId = "")
 				return
-			
+
 			Send, `;je{Enter} ; Launch the job list using the actual macro.
 			Send, % "eP" jobId "`n" ; Jump into examining the provided job.
+		}
+	:X:;trace::
+		lookupTrace() {
+			executionId := SelectLib.getText()
+			if(executionId = "")
+				return
+
+			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " executionId)
+			if (traceId = "") {
+				Toast.ShowError("Failed to get trace ID from WSL")
+				return
+			}
+			ClipboardLib.setAndToast(traceId, "Trace ID")
+
+			url := Config.private["EPIC_FACTORY_TRACE_URL_BASE"].replaceTags({ "DEPLOYMENT":"foundry", "TRACE_ID":traceId })
+			Run(url)
 		}
 
 ; MTPutty pass-throughs

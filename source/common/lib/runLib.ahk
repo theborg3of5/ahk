@@ -34,13 +34,15 @@ class RunLib {
 	; DESCRIPTION:    Run the given command and return the output.
 	; PARAMETERS:
 	;  command (I,REQ) - Command to run.
+	;  stderr  (O,OPT) - If provided, receives the standard error output.
 	; RETURNS:        The output from the command, as passed to standard out.
 	;---------
-	runReturn(command) {
+	runReturn(command, ByRef stderr := "") {
 		fullCommand := A_ComSpec . " /c """ . command . """"
 		shell := comobjcreate("wscript.shell")
 		exec := (shell.exec(fullCommand))
 		stdout := exec.stdout.readall()
+		stderr := exec.stderr.readall()
 		return stdout
 	}
 

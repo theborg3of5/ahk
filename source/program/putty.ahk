@@ -64,9 +64,12 @@
 			if(executionId = "")
 				return
 
-			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " executionId)
+			; Actual query happens in WSL, as that's where the auth stuff we need lives.
+			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " executionId, stderr)
 			if (traceId = "") {
-				Toast.ShowError("Failed to get trace ID from WSL")
+				tt := new TextTable("Failed to get trace ID from WSL")
+				tt.addRow(stderr)
+				new TextPopup(tt).show()
 				return
 			}
 			ClipboardLib.setAndToast(traceId, "Trace ID")

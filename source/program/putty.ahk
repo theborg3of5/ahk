@@ -74,6 +74,7 @@
 			; Actual query happens in WSL, as that's where the auth stuff we need lives.
 			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId, stderr)
 			if (traceId = "") {
+				pt.endStep("Failed!")
 				pt.finish("Failed to get trace ID")
 
 				tt := new TextTable("Failed to get trace ID from WSL")

@@ -72,7 +72,20 @@
 
 			pt.nextStep("Querying Factory via WSL")
 			; Actual query happens in WSL, as that's where the auth stuff we need lives.
-			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId, stderr)
+			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId, stderr, exitCode)
+
+			if (exitCode = 2) {
+				pt.endStep("Token expired")
+
+				pt.nextStep("Logging in to Cloud Foundry")
+				; Use RunWait [not runReturn()] because this does need to be an interactive terminal
+				RunWait, wsl.exe ~/dotfiles/bin/cf-factory-login.sh
+				pt.endStep("done")
+
+				pt.nextStep("Retrying trace lookup")
+				traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId, stderr, exitCode)
+			}
+
 			if (traceId = "") {
 				pt.endStep("Failed!")
 				pt.finish("Failed to get trace ID")
@@ -80,7 +93,7 @@
 				tt := new TextTable("Failed to get trace ID from WSL")
 				tt.addRow(stderr)
 				new TextPopup(tt).show()
-				
+
 				return
 			}
 			clipboard := traceId

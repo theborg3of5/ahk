@@ -33,17 +33,19 @@ class RunLib {
 	;---------
 	; DESCRIPTION:    Run the given command and return the output.
 	; PARAMETERS:
-	;  command (I,REQ) - Command to run.
-	;  stderr  (O,OPT) - If provided, receives the standard error output.
+	;  command  (I,REQ) - Command to run.
+	;  stderr   (O,OPT) - If provided, receives the standard error output.
+	;  exitCode (O,OPT) - If provided, receives the process exit code.
 	; RETURNS:        The output from the command, as passed to standard out.
 	;---------
-	runReturn(command, ByRef stderr := "") {
+	runReturn(command, ByRef stderr := "", ByRef exitCode := "") {
 		stdoutFile := A_Temp "\ahk_runReturn_stdout.tmp"
 		stderrFile := A_Temp "\ahk_runReturn_stderr.tmp"
-		
+
 		fullCommand := A_ComSpec " /c """ command """ >" stdoutFile " 2>" stderrFile
 		RunWait, %fullCommand%,, Hide
-		
+		exitCode := ErrorLevel
+
 		FileRead, stdout, %stdoutFile%
 		FileRead, stderr, %stderrFile%
 		FileDelete, %stdoutFile%

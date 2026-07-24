@@ -5,17 +5,21 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Prompt the user to choose one or more internal environments using a Selector.
 	; PARAMETERS:
-	;  selectorTitle (I,REQ) - The title for the Selector.
-	;  selectorIcon  (I,OPT) - The icon to use for the Selector popup.
+	;  selectorTitle       (I,OPT) - The title for the Selector.
+	;  selectorIcon        (I,OPT) - The icon to use for the Selector popup.
+	;  selectorExtraFields (I,OPT) - If you want to add extra fields to the Selector popup, pass an 
+	;                                associative array {fieldName: defaultValue} of them here.
 	; RETURNS:        Array of environment data arrays (or null if the user didn't accept)
 	;---------
-	selectEpicEnvironments(selectorTitle, selectorIcon := "") {
+	selectEpicEnvironments(selectorTitle, selectorIcon := "", extraFields := "") {
 		; Set up Selector
 		s := new Selector("epicEnvironments.tls")
 		if(selectorTitle != "")
 			s.setTitle(selectorTitle)
 		if(selectorIcon != "")
 			s.setIcon(selectorIcon)
+		if(extraFields != "")
+			s.addOverrideFields(extraFields.toKeysArray()).setDefaultOverrides(extraFields)
 		
 		; Show the popup and get user input
 		environments := s.promptMulti()

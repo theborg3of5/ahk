@@ -121,10 +121,8 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			if (record.ini && record.ini.length() != 3)
 				record := ""
 			
-			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment").setIcon(Config.getProgramPath("Snapper"))
-			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out
-			environments := s.promptMulti() ; Each individual element is for a specific environment, which also includes any specified records.
-			For _, env in environments {
+			environments := EpicLib.selectEpicEnvironments("Open Record(s) in Snapper in Environment", Config.getProgramPath("Snapper"), {"INI":record.ini, "ID":record.id})
+			For _, env in environments { ; Each individual element is for a specific environment, which also includes any specified records.
 				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 					Config.runProgram("Snapper")
 				else

@@ -19,6 +19,14 @@
 				Chrome Hyperspace				-							-								– Hyperspace –
 		}
 		
+		; Various flavors of main Teams window (so we can tell it apart from meetings)
+		~EXE.replaceWith(ms-teams.exe) {
+				Teams Activity					-							-								Activity \|
+				Teams Chat						-							-								Chat \|
+				Teams Calendar					-							-								Calendar \|
+				Teams Calls						-							-								Calls \|
+		}
+		
 		; EMC2 windows - we use RegEx match mode for EXE, so we can match any version (and also check the path for EMC2, to differentiate from Hyperspace).
 		~EXE.replaceWith(EMC2.+EpicD.+\.exe) | ~TITLE_MATCH_MODE.replaceWith(REGEX) {
 			; Different sections of the main EMC2 window.

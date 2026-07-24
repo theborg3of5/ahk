@@ -12,7 +12,15 @@
 			GrepWin						-				-				1440		900
 			Steam						-				-				1440		900			HOME
 			Snapper
-			Teams						-				-				1440		900			WORK
+		
+		~WIDTH.defaultTo(1440) | HEIGHT.defaultTo(900) {
+			; Main window for Teams (the generic Teams window covers meetings instead)
+			Teams Activity				-				-				-			-			WORK
+			Teams Chat					-				-				-			-			WORK
+			Teams Calendar				-				-				-			-			WORK
+			Teams Calls					-				-				-			-			WORK
+		}
+		
 			TickTick					RIGHT_EDGE		TOP_EDGE		1200		100%
 			Putty						RIGHT_EDGE		TOP_EDGE		1350		100%		WORK
 			MTPutty						RIGHT_EDGE		TOP_EDGE		1440		100%		WORK
@@ -49,7 +57,10 @@
 			Notepad++					-				-				MAX			MAX
 			OneNote						-				-				MAX			MAX
 			Spotify						-				-				MAX			MAX			-			1
+			; This covers meeting windows, since the main window should be caught by the block above.
+			Teams						-				-				MAX			MAX			WORK
 			VMware Horizon Client		-				-				MAX			MAX			WORK
+		
 	}
 	
 # Gaming presets - mostly quartered social windows on the non-gaming monitor

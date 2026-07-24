@@ -29,11 +29,14 @@ class EpicLib {
 		; Replace special tags found in some values.
 		latestLocalVersion := EpicLib.findLatestInstalledHyperspaceVersion()
 		latestLocalVersionFlat := latestLocalVersion.remove(".")
-
 		For _, env in environments {
 			env["VERSION"]   := env["VERSION"].replaceTag(  "LATEST_LOCAL_VERSION",      latestLocalVersion)
 			env["COMM_ID"]   := env["COMM_ID"].replaceTag(  "LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
 			env["HSWEB_URL"] := env["HSWEB_URL"].replaceTag("LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
+
+			env["COMM_ID"]   := env["COMM_ID"].replaceTag(  "PRESTO_NUM", env["PRESTO_NUM"])
+			env["ENV_ID"]    := env["ENV_ID"].replaceTag(   "PRESTO_NUM", env["PRESTO_NUM"])
+			env["HSWEB_URL"] := env["HSWEB_URL"].replaceTag("PRESTO_NUM", env["PRESTO_NUM"])
 		}
 
 		return environments

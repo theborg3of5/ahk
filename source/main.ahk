@@ -50,7 +50,6 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include fastStoneImageViewer.ahk
 #Include flowLauncher.ahk
 #Include hyperdrive.ahk
-#Include hyperspace.ahk
 #Include internetExplorer.ahk
 #Include kdiff.ahk
 #Include notepadPlusPlus.ahk
@@ -68,7 +67,6 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include tortoise.ahk
 #Include visualStudio.ahk
 #Include vsCode.ahk
-#Include wilma.ahk
 #Include winMerge.ahk
 #Include word.ahk
 #Include zoom.ahk

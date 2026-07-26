@@ -87,7 +87,7 @@
 				GitExtensions					GitExtensions.exe
 				GitHub Desktop					GitHubDesktop.exe			-								-										NO_PADDING
 				GrepWin							grepWin.exe
-				Hyperspace						EpicD\d+\.exe				-								-										-				REGEX
+		
 				Hyperdrive						Hyperdrive.exe
 				Internet Explorer				IEXPLORE.EXE
 				KDiff							kdiff3.exe					-								- KDiff3

@@ -38,7 +38,6 @@
 	~MONITOR.replaceWith(MIDDLE) {
 			Chrome						-				-				MAX			MAX
 			Chrome Hyperspace			-				-				1920		1080		WORK
-			Hyperspace					-				-				1920		1080		WORK
 			Hyperdrive					-				-				1920		1080		WORK
 			Process Explorer			-				-				1440		900
 			Visual Studio				-				-				MAX			MAX			WORK

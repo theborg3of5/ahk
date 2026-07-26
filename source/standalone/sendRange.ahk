@@ -1,4 +1,4 @@
-﻿; Generate a Hyperdrive environments file from the environments we have configured for Hyperspace.
+﻿; Send a numeric range as comma-separated values.
 
 #Include <includeCommon>
 #LTrim, Off

@@ -82,13 +82,6 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			}
 		}
 	
-	^+!#h::
-		selectHyperspace() {
-			environments := EpicLib.selectEpicEnvironments("Launch Classic Hyperspace in Environment")
-			For _, env in environments
-				EpicLib.runHyperspace(env["VERSION"], env["COMM_ID"], env["TIME_ZONE"])
-		}
-		
 	^!#h::
 		selectHSWeb() {
 			environments := EpicLib.selectEpicEnvironments("Launch Standalone HSWeb in Environment", Config.getProgramPath("Chrome"))

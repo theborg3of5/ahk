@@ -18,7 +18,6 @@
 	^h:: Send, ^7 ; Make ^h for server object, similar to ^g for client object.
 	^+h::Send, ^h ; Keep access to the "find and replace" hotkey.
 	$F5::+F5      ; Make F5 work everywhere by mapping it to shift + F5.
-	^+t::return   ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
 	
 	; Link and record number things based on the current record.
 	!c:: EpicLib.copyEMC2RecordIDFromText(WinGetTitle("A")) ; Copy ID

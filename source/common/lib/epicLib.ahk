@@ -27,36 +27,13 @@ class EpicLib {
 			return ""
 
 		; Replace special tags found in some values.
-		latestLocalVersion := EpicLib.findLatestInstalledHyperspaceVersion()
-		latestLocalVersionFlat := latestLocalVersion.remove(".")
 		For _, env in environments {
-			env["VERSION"]   := env["VERSION"].replaceTag(  "LATEST_LOCAL_VERSION",      latestLocalVersion)
-			env["COMM_ID"]   := env["COMM_ID"].replaceTag(  "LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
-			env["HSWEB_URL"] := env["HSWEB_URL"].replaceTag("LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
-
 			env["COMM_ID"]   := env["COMM_ID"].replaceTag(  "PRESTO_NUM", env["PRESTO_NUM"])
 			env["ENV_ID"]    := env["ENV_ID"].replaceTag(   "PRESTO_NUM", env["PRESTO_NUM"])
 			env["HSWEB_URL"] := env["HSWEB_URL"].replaceTag("PRESTO_NUM", env["PRESTO_NUM"])
 		}
 
 		return environments
-	}
-	
-	;---------
-	; DESCRIPTION:    Run Hyperspace locally for the given version and environment.
-	; PARAMETERS:
-	;  version     (I,REQ) - Dotted Hyperspace version
-	;  environment (I,OPT) - EpicComm ID for the environment to connect to.
-	;  timeZone    (I,OPT) - Time zone for the environment.
-	;---------
-	runHyperspace(version, environment := "", timeZone := "") {
-		runString := Config.private["HYPERSPACE_BASE"]
-		runString := runString.replaceTag("VERSION",      version)
-		runString := runString.replaceTag("VERSION_FLAT", version.remove("."))
-		runString := runString.replaceTag("ENVIRONMENT",  environment)
-		runString := runString.replaceTag("TIME_ZONE",    timeZone)
-		
-		Run(runString)
 	}
 	
 	;---------
@@ -192,28 +169,6 @@ class EpicLib {
 		return latestEMC2Folder "\Shared Files\EpicD" latestVersion.remove(".") ".exe"
 	}
 
-	;---------
-	; DESCRIPTION:    Find the latest version of Hyperspace that's currently installed.
-	; RETURNS:        Numeric version (i.e. 10.1)
-	;---------
-	findLatestInstalledHyperspaceVersion() {
-		latestVersion := 0.0
-
-		Loop, Files, C:\Program Files (x86)\Epic\v*.*, D
-		{
-			version := A_LoopFileName.removeFromStart("v")
-
-			; Only consider versions where there's an executable (aka the version is actually installed)
-			if(!FileExist(A_LoopFileLongPath "\Shared Files\EpicD" version.remove(".") ".exe"))
-				Continue
-			
-			if(version > latestVersion)
-				latestVersion := version
-		}
-
-		return latestVersion
-	}
-	
 	;---------
 	; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except certain DLGs
 	;                 that have prefixes (I, T, CS, R, etc).

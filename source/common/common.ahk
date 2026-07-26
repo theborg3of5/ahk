@@ -92,7 +92,6 @@ Object(params*) {
 	#Include epicStudio.ahk
 	#Include excel.ahk
 	#Include explorer.ahk
-	#Include hyperspace.ahk
 	#Include internetExplorer.ahk
 	#Include mBuilder.ahk
 	#Include mSnippets.ahk

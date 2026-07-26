@@ -125,13 +125,10 @@ handleDuplicateEnvironments(environmentLines, dataLines) {
 ; DESCRIPTION:    Build a single new TLS line for an environment.
 ; PARAMETERS:
 ;  dataLine (I,REQ) - The line of environment data from the database. Format:
-;                     	envDotTwo^displayName^abbrev^commId^denId^vdiId^versionNum^webURL
+;                     	envDotTwo^displayName^abbrev^commId^denId^vdiId^webURL
 ; RETURNS:        TLS line, broken up by (single - reformatting happens at the end) tabs.
 ;---------
 buildTLSLine(dataLine) {
-	shortMonth := versionShortName.beforeString(" ")
-	shortYear  := versionShortName.afterString(" ")
-
 	data := dataLine.split("^")
 	envDotTwo   := data[1]
 	displayName := data[2]
@@ -139,12 +136,11 @@ buildTLSLine(dataLine) {
 	commId      := data[4]
 	denId       := data[5]
 	vdiId       := data[6]
-	versionNum  := data[7]
-	webURL      := data[8]
+	webURL      := data[7]
 
 	abbrev := abbrev ? abbrev : "***" ; Abbreviation defaults to a placeholder
 
-	return displayName "`t" abbrev "`t" commId "`t" denId "`t" vdiId "`t" versionNum "`t" webURL
+	return displayName "`t" abbrev "`t" commId "`t" denId "`t" vdiId "`t" webURL
 }
 
 ;---------

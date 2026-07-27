@@ -78,7 +78,14 @@ class ActionObjectEpicCode extends ActionObjectBase {
 		if(!link)
 			return
 		
-		WindowActions.activateWindowByName("VSCode EpicCode")
+		; Routines should open up in an existing EpicCode instance if possible, while DLGs should always be
+		; a new instance.
+		if (this.descriptorType = this.DescriptorType_DLG) {
+			VSCode.launchCode("EpicCode")
+			WinWaitActive, % Config.windowInfo["VSCode EpicCode"].titleString
+		} else {
+			WindowActions.activateWindowByName("VSCode EpicCode")
+		}
 
 		Run(link)
 	}

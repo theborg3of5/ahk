@@ -23,7 +23,18 @@ class VSCode {
 		if (winId != "")
 			WindowActions.activateWindowByName(windowName)
 		else
-			Config.runProgram("VSCode", "--profile " profileName " " runParams)
+			this.launchCode(profileName, runParams)
+	}
+
+	;---------
+	; DESCRIPTION:    Launch the given VSCode profile.
+	; PARAMETERS:
+	;  profileName   (I,REQ) - Name of the profile
+	;                          We assume that there's also a window name of "VSCode <profileName>"
+	;  runParams     (I,OPT) - If it should be run (if not found) with any additional parameters, pass those here.
+	;---------
+	launchCode(profileName, runParams := "") {
+		Config.runProgram("VSCode", "--profile " profileName " " runParams)
 	}
 
 	;---------

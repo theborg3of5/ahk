@@ -15,7 +15,15 @@
 	Skype							CLOSE
 	Slack							CLOSE		-			-				-				-			RUN			ESCAPE		HOME_DESKTOP
 	Spotify							CLOSE		CLOSE		-				-				-			-			ESCAPE
-	Teams							CLOSE		CLOSE		-				-				-			-			ESCAPE
+
+	; Teams main window (default "Teams" window covers meetings and such now instead)
+~ESC.defaultTo(CLOSE) | ~BACKTICK.defaultTo(ESCAPE) {
+	Teams Activity
+	Teams Chat
+	Teams Calendar
+	Teams Calls
+}
+
 	Telegram						CLOSE		CLOSE		-				-				-			RUN			ESCAPE
 	Thunder							CLOSE
 

@@ -120,6 +120,25 @@ class EpicLib {
 		
 		return path
 	}
+
+	;---------
+	; DESCRIPTION:    Check whether the given version is the latest one we have source for on this machine.
+	; PARAMETERS:
+	;  versionNum (I,REQ) - Version number (i.e. 12.1)
+	; RETURNS:        true/false - is this the latest version?
+	;---------
+	isCurrentVersion(versionNum) {
+		return (versionNum = this.findCurrentVersion())
+	}
+
+	;---------
+	; DESCRIPTION:    Find the current source version, based on the source code found on this machine.
+	; RETURNS:        Numeric version (like 12.1) for the latest version
+	;---------
+	findCurrentVersion() {
+		latestPath := this.findCurrentVersionSourceFolder()
+		return latestPath.afterString("C:\EpicSource\")
+	}
 	
 	;---------
 	; DESCRIPTION:    Find the source folder of the current version, by looking for the biggest version number we have a
@@ -422,6 +441,8 @@ class EpicLib {
 			if (!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
 				Continue
 			
+			version := A_LoopFileLongPath.afterString("C:\EpicSource\")
+
 			versionFolderPath := A_LoopFileLongPath
 			Loop, Files, %versionFolderPath%\*, D
 			{
@@ -446,13 +467,23 @@ class EpicLib {
 						abbrev := "d"
 					}
 				} else if (name = "stage1") {
-					cat    := "Integration"
-					name   := "Stage 1"
-					abbrev := "s1"
+					cat := "Integration"
+					if (this.isCurrentVersion(version)) {
+						name   := "Stage 1 (Current)"
+						abbrev := "s1"
+					} else {
+						name   := "Stage 1 (" version ")"
+						abbrev := "s" version.remove(".")
+					}
 				} else if (name = "final") {
-					cat    := "Integration"
-					name   := "Final"
-					abbrev := "f"
+					cat := "Integration"
+					if (this.isCurrentVersion(version)) {
+						name   := "Final (Current)"
+						abbrev := "f"
+					} else {
+						name   := "Final (" version ")"
+						abbrev := "f" version.remove(".")
+					}
 				} else {
 					cat    := "User Branches"
 					name   := name
@@ -493,8 +524,9 @@ class EpicLib {
 			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 		}
 
-		; Reverse the order of the SUs, so the more recent-version ones come first
-		folders["SUs"] := DataLib.reverseArray(folders["SUs"])
+		; Reverse the order of the SUs and integration folders, so the more recent-version ones come first
+		folders["SUs"]         := DataLib.reverseArray(folders["SUs"])
+		folders["Integration"] := DataLib.reverseArray(folders["Integration"])
 
 		s := new Selector().setTitle(title).setIcon(icon)
 		this.addFolderChoicesForType(s, folders, "Known DLGs")

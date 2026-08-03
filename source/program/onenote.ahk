@@ -19,7 +19,7 @@
 	!+Left:: Send, !{Left}
 	!+Right::Send, !{Right}
 	
-	; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and EpicStudio.
+	; Make line movement alt + up/down instead of alt + shift + up/down to match IDEs.
 	!Up::  !+Up
 	!Down::!+Down
 	

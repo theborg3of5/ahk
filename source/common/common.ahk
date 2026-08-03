@@ -89,7 +89,6 @@ Object(params*) {
 	#Include chrome.ahk
 	#Include ditto.ahk
 	#Include emc2.ahk
-	#Include epicStudio.ahk
 	#Include excel.ahk
 	#Include explorer.ahk
 	#Include internetExplorer.ahk

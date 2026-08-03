@@ -14,7 +14,6 @@ Your `admin/ahk2.todo` documents the v1->v2 language changes comprehensively. Th
 - Install AHK v2 alongside v1 (both can coexist)
 - **Retire these scripts** (delete or move to an `archive/` folder — don't spend time converting them):
   - `source/program/internetExplorer.ahk` + `source/common/program/internetExplorer.ahk`
-  - `source/program/epicStudio.ahk` + `source/common/program/epicStudio.ahk`
   - `source/program/hyperspace.ahk` + `source/common/program/hyperspace.ahk`
   - `source/common/program/mBuilder.ahk`
   - `source/common/external/commandFunctions.ahk` (redundant in v2 — but still need a shim during migration, see Phase 1A)
@@ -223,7 +222,7 @@ Largest (after retirements): outlook.ahk (394 lines), mSnippets.ahk (356 lines),
 ### Standalone scripts (~35 active)
 Each includes `<includeCommon>` so they inherit common changes. Priority:
 1. Frequently used: `timer.ahk`, `runProgram.ahk`, `activateProgram.ahk`, `sendMediaKey.ahk`
-2. Dev tools: `compileEpicStudioRegex.ahk`, `findProjectInSolutionsFolder.ahk`
+2. Dev tools: `findProjectInSolutionsFolder.ahk`
 3. GUI-based: `colorPicker.ahk` (done in Phase 5), `iconTester.ahk`
 4. The rest
 

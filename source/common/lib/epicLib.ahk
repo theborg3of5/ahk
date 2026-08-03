@@ -578,7 +578,7 @@ class EpicLib {
 		windows := [] ; [ {windowName, title} ]
 		
 		; Normal titles (none of these can have the record title in them, so don't include that bit)
-		For _,windowName in ["EMC2", "EpicStudio", "Visual Studio", "Explorer"] {
+		For _,windowName in ["EMC2", "Visual Studio", "Explorer"] {
 			title := Config.windowInfo[windowName].getCurrTitle()
 			title := title.removeFromEnd(windowName).clean("-") ; Trim the window name off the end - we're gonna show it at the start anyways.
 			windows.push({windowName:windowName, title:title})
@@ -605,7 +605,7 @@ class EpicLib {
 			return true
 		
 		; Certain windows will only ever include the INI/ID, never the record title.
-		noTitleWindows := ["EMC2", "EpicStudio", "Visual Studio", "Explorer"]
+		noTitleWindows := ["EMC2", "Visual Studio", "Explorer"]
 		if(noTitleWindows.contains(windowName))
 			return false
 		

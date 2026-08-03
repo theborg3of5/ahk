@@ -57,7 +57,6 @@
 		Epic Source Current S1 Billing Solutions	EPIC_SOURCE_S1_BILL_SOLUTIONS		<EPIC_SOURCE_CURRENT>\stage1\HSWeb\Solutions\Apps\Billing
 		Epic Source EpicCode Workspaces				EPIC_SOURCE_SERVER					C:\EpicSource\Server
 		Transaction Diff							TX_DIFF								C:\Program Files\TransactionDiff
-		EpicStudio Global Highlights				EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights
 	
 	; OneDrive folders
 	~PATH.addToStart(<USER_ONEDRIVE>\) {

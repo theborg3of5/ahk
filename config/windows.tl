@@ -56,10 +56,6 @@
 				VSCode EpicCode					-							-								EpicCode -
 		}
 		
-				EpicStudio New Object Window	EpicStudio.exe				-								New Object
-				EpicStudio Tokenize String		EpicStudio.exe				-								Tokenize String
-				EpicStudio Bookmark Comment		EpicStudio.exe				-								Bookmark Comment
-				EpicStudio Debug Window			EpicStudio.exe				-								Attach to Process
 				Onetastic Macro Editor			ONENOTE.EXE					Onetastic Window
 				PowerPoint Presenting			POWERPNT.EXE				screenClass
 				PowerPoint Presenter View		POWERPNT.EXE				PodiumParent
@@ -77,7 +73,6 @@
 				Claude							claude.exe					Chrome_WidgetWin_1
 				Discord							Discord.exe					-								-										NO_PADDING
 				EMC2							EMC2.+EpicD\d+\.exe			ThunderRT6MDIForm				-										-				REGEX
-				EpicStudio						EpicStudio.exe				-								EpicStudio
 				Everything						Everything.exe				EVERYTHING
 				Excel							EXCEL.EXE
 				Explorer						explorer.exe				CabinetWClass

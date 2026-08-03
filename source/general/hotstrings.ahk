@@ -21,7 +21,7 @@
 
 ;region Typo correction
 ;region Not typos while programming
-#If ! ( Config.isWindowActive("EpicStudio") || Config.isWindowActive("VSCode") || Config.isWindowActive("Visual Studio") )
+#If ! ( Config.isWindowActive("VSCode") || Config.isWindowActive("Visual Studio") )
 :*0:,3::<3
 ::<#::<3
 ::<43::<3
@@ -73,7 +73,7 @@
 ::everythign::everything
 ;endregion Typo correction
 	
-#If !Config.findWindowName("A").isAnyOf(["EpicStudio", "Visual Studio", "VSCode"])
+#If !Config.findWindowName("A").isAnyOf(["Visual Studio", "VSCode"])
 	::helptext::help text
 #If
 

@@ -53,7 +53,7 @@ $!q::WindowActions.minimizeWindow()
 ^#+f::WindowPositions.fixAllWindows()
 
 ; Scroll horizontally with Shift held down.
-#If !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
+#If !Config.isWindowActive("Chrome") ; Chrome handles its own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
 	+WheelUp::WheelLeft
 	+WheelDown::WheelRight
 #If

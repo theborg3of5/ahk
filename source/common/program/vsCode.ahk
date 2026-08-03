@@ -170,7 +170,7 @@ class VSCode {
 	
 	;---------
 	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard, stripping
-	;                 off any offset ("+4" in "tag+4^routine") and the RTF link that EpicStudio adds.
+	;                 off any offset ("+4" in "tag+4^routine") and the RTF link that EpicCode adds.
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
 	copyCleanEpicCodeLocation() {

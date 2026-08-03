@@ -52,7 +52,6 @@
 		
 			Cisco VPN					LEFT_EDGE+25	300				-			-			HOME
 			EMC2						-				-				MAX			MAX			WORK
-			EpicStudio					-				-				MAX			MAX			WORK
 			Notepad++					-				-				MAX			MAX
 			OneNote						-				-				MAX			MAX
 			Spotify						-				-				MAX			MAX			-			1

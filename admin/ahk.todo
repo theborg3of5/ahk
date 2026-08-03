@@ -39,7 +39,7 @@
 * Fixes / Cleanup * :
 	☐ Clean out unused stuff:
 		☐ internetExplorer
-		☐ epicStudio (and assorted related stuff like actionObjectEpicStudio, compileEpicStudioRegex)
+		✔ epicStudio (and assorted related stuff like actionObjectEpicStudio, compileEpicStudioRegex)
 		☐ hyperspace
 		☐ mBuilder
 		☐ actionObjectTrackLab (probably combine this with actionObjectSVNLog?)
@@ -195,10 +195,10 @@
 			Maybe not overkill? Could be a nice quick reference for abbreviations.
 		☐ Maybe a quick text-popup display of syntax/abbreviations?
 	☐ ActionObject: consider a "could be" sort of sense for filtering which things an input is
-		For example, something with a "^" could go to either EpicStudio or CodeSearch
+		For example, something with a "^" could go to either EpicCode or CodeSearch
 		Alternatively, group like inputs together in one merged class
-			Keep ActionObjectEpicStudio for DLG case? Or maybe move into a special case of ActionObjectEMC2 instead?
-			EpicStudio database code + CodeSearch database code + CodeSearch client code => ActionObjectCodeLocation?
+			Keep ActionObjectEpicCode for DLG case? Or maybe move into a special case of ActionObjectEMC2 instead?
+			EpicCode database code + CodeSearch database code + CodeSearch client code => ActionObjectCodeLocation?
 	☐ ActionObjectCodeSearch client: there's also a "Directory path" search field now that I might be able to use?
 		Interesting idea: if multiple files with same name, look thru file tree in Stage 1 and present Selector of the options?
 	☐ Could we make linking hotkey more reliable by generating an (RTF?) link on the clipboard and pasting it, rather than relying on the linking popups?
@@ -225,9 +225,6 @@
 			Could we just replace it with a public flag (or public setter to a private flag, whatever) on Debug, so that the script itself could decide where the cutover point is?
 	☐ Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	☐ CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
-	☐ EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
-		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
-		Initial submission would involve a selector popup of environments
 	Rework Selector/FlexTable:
 		☐ Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?
 			https://www.autohotkey.com/docs/commands/Gui.htm#PosSize

@@ -91,6 +91,19 @@ class Putty {
 		if(logFilePath)
 			Run(logFilePath)
 	}
+
+	;---------
+	; DESCRIPTION:    Get the current clipboard as a valid string in M.
+	; RETURNS:        Escaped string
+	;---------
+	getClipboardAsMString() {
+		clip := clipboard
+		
+		QUOTE := """" ; Double-quote character
+		clip := StringLib.escapeCharUsingChar(clip, QUOTE, QUOTE)
+		
+		return QUOTE clip QUOTE
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------

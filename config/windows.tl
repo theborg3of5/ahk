@@ -53,6 +53,7 @@
 		~EXE.replaceWith(Code.exe) {
 				VSCode AHK						-							-								AHK -
 				VSCode EpicCode DLG				-							-								EpicCode - DLG-
+				VSCode EpicCode XGDB			-							-								EpicCode - XGDB -
 				VSCode EpicCode					-							-								EpicCode -
 		}
 		

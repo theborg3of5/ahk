@@ -104,6 +104,72 @@ class Putty {
 		
 		return QUOTE clip QUOTE
 	}
+
+	;---------
+	; DESCRIPTION:    Convert the selected Sous execution ID to a trace ID and launch the trace 
+	;                 portal for it.
+	; PARAMETERS:
+	;  deployment (I,OPT) - DEV, QA, or FINAL for which deployment to use. Defaults to DEV.
+	;---------
+	lookupTrace(deployment := "DEV") {
+		; Map deployment to the portal environment name (for URLs) and CF deployment name (for login).
+		if (deployment = "DEV") {
+			portalEnv := "foundry"
+			cfDeployment := "int-foundry"
+		} else if (deployment = "QA") {
+			portalEnv := "int-st-dev-ci"
+			cfDeployment := "int-st-dev-ci"
+		} else if (deployment = "FINAL") {
+			portalEnv := "int-st-qa-ci"
+			cfDeployment := "int-st-qa-ci"
+		}
+
+		pt := new ProgressToast("Finding trace ID from ExecID")
+		pt.nextStep("Getting execId")
+
+		execId := SelectLib.getText()
+		if(execId = "") {
+			pt.finish("No execId found")
+			return
+		}
+		pt.endStep(execId)
+
+		pt.nextStep("Querying " portalEnv " factory via WSL")
+		; Actual query happens in WSL, as that's where the auth stuff we need lives.
+		portalURL := Config.private["EPIC_FACTORY_PORTAL_URL_BASE"].replaceTag("DEPLOYMENT", portalEnv)
+		traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " portalURL, stderr, exitCode)
+
+		if (exitCode = 2) {
+			pt.endStep("Token expired")
+
+			pt.nextStep("Logging into " portalEnv " cluster")
+			; Use RunWait [not runReturn()] because this does need to be an interactive terminal
+			RunWait, wsl.exe ~/dotfiles/bin/cf-factory-login.sh %cfDeployment%
+			pt.endStep("done")
+
+			pt.nextStep("Retrying trace lookup")
+			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " portalUrl, stderr, exitCode)
+		}
+
+		if (traceId = "") {
+			pt.endStep("Failed!")
+			pt.finish("Failed to get trace ID")
+
+			tt := new TextTable("Failed to get trace ID from WSL")
+			tt.addRow(stderr)
+			new TextPopup(tt).show()
+
+			return
+		}
+		clipboard := traceId
+		pt.endStep(traceId " (now on clipboard)")
+
+		pt.nextStep("Building and running URL")
+		url := Config.private["EPIC_FACTORY_TRACE_URL_BASE"].replaceTags({ "DEPLOYMENT":portalEnv, "TRACE_ID":traceId })
+		Run(url)
+
+		pt.finish()
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------

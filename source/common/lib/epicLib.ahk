@@ -470,7 +470,7 @@ class EpicLib {
 					cat := "Integration"
 					if (this.isCurrentVersion(version)) {
 						name   := "Stage 1 (Current)"
-						abbrev := "s1"
+						abbrev := ["s1", "q"]
 					} else {
 						name   := "Stage 1 (" version ")"
 						abbrev := "s" version.remove(".")

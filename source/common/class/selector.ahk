@@ -176,8 +176,8 @@ class Selector {
 	
 	;region Gui Changes
 	;---------
-	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
-	;                 they add (or is defaulted in) in the final return array.
+	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and include
+	;                 whatever data they add (or is defaulted in) in the final return array.
 	; PARAMETERS:
 	;  fieldsToAdd (I,REQ) - Numerically-indexed object of field names (treated the same as column names from choices) to add.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .prompt()/.select().
@@ -187,10 +187,21 @@ class Selector {
 		if(!this.overrideFields)
 			this.overrideFields := {}
 		
-		baseLength := this.overrideFields.count()
-		For i,label in fieldsToAdd
-			this.overrideFields[baseLength + i] := label
-		
+		; Try to slot the given fields into their requested indices, bumping them to the next empty
+		; one if needed.
+		For fieldIndex,label in fieldsToAdd {
+			Loop {
+				targetIndex := fieldIndex
+				if (this.overrideFields[targetIndex] != "") {
+					; This position is already filled, move onto the next one.
+					targetIndex++
+				} else {
+					this.overrideFields[targetIndex] := label
+					Break
+				}
+			}
+		}
+
 		return this
 	}
 	
@@ -354,7 +365,7 @@ class Selector {
 	_minColumnWidth  := 0  ; How wide (in pixels) each column must be, at a minimum.
 	choices          := "" ; Array of visible choices the user can pick from (array of SelectorChoice objects).
 	sectionTitles    := "" ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	overrideFields   := "" ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
+	overrideFields   := "" ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers). Might have gaps in its numbering.
 	filePath         := "" ; Where the file lives if we're reading one in.
 	defaultOverrides := "" ; {columnLabel: value} - Default values to show in override fields, by column name
 	dataTL           := "" ; TableList instance read from file, which we'll extract choice and other info from.

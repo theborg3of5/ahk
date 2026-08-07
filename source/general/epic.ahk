@@ -114,7 +114,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			if (record.ini && record.ini.length() != 3)
 				record := ""
 			
-			environments := EpicLib.selectEpicEnvironments("Open Record(s) in Snapper in Environment", Config.getProgramPath("Snapper"), {"INI":record.ini, "ID":record.id})
+			environments := EpicLib.selectEpicEnvironments("Open Record(s) in Snapper in Environment", Config.getProgramPath("Snapper"), ["INI", "ID"], {"INI":record.ini, "ID":record.id})
 			For _, env in environments { ; Each individual element is for a specific environment, which also includes any specified records.
 				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 					Config.runProgram("Snapper")

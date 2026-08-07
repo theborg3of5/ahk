@@ -17,8 +17,8 @@ class SelectorGui {
 	;  sectionHeaders (I,OPT) - Array of headers that divide up sections of choices. The index on 
 	;                           a given title should match that of the first choice that should be 
 	;                           under that header.
-	;  overrideFields (I,OPT) - Array of labels (column headers in the TL file) for the data 
-	;                           that should get override fields.
+	;  overrideFields (I,OPT) - Associative array of labels (column headers in the TL file) for the 
+	;                           data that should get override fields. overrideFields[idx] := fieldLabel
 	;  minColumnWidth (I,OPT) - Column width will never be smaller than the longest choice, 
 	;                           but will also not get smaller than this value. Defaults to 0.
 	;  iconPath       (I,OPT) - Path to an icon to show for the popup.
@@ -111,7 +111,7 @@ class SelectorGui {
 	fieldVar_Choice          := "" ; Unique name (starting with this.guiId) for the choice field.
 	fieldVar_OverridesPrefix := "" ; Unique prefix (starting with this.guiId) for the override fields.
 	
-	overrideFields := "" ; Simple array of the names for the fields to add
+	overrideFields := "" ; Associative array {index: fieldLabel} of the names for the fields to add
 	choiceQuery    := "" ; What the user entered in the query (bottom-left) field
 	overrideData   := {} ; {label: inputValue}
 	
@@ -290,7 +290,7 @@ class SelectorGui {
 		y := this.totalHeight
 		width := this.calcSingleOverrideFieldWidth(wOverridesBlock)
 		
-		For _,label in this.overrideFields {
+		For _,label in this.overrideFields { ; Loop over these in order, collapsing any gaps.
 			varName := this.fieldVar_OverridesPrefix label
 			this.addField(varName, x, y, width, this.Heights["FIELD"], label, SelectorGui.Prefix_GuiSpecialLabels "OverrideFieldChanged") ; Default in the label, like ghost text, and bind any changes to SelectorGui_OverrideFieldChanged().
 			x += width + this.Padding["OVERRIDE_FIELDS"]
@@ -305,7 +305,7 @@ class SelectorGui {
 	; RETURNS:        The width that each override field should be.
 	;---------
 	calcSingleOverrideFieldWidth(overrideBlockWidth) {
-		numDataFields  := this.overrideFields.length()
+		numDataFields  := this.overrideFields.Count()
 		widthForFields := overrideBlockWidth - ((numDataFields - 1) * this.Padding["OVERRIDE_FIELDS"])
 		return widthForFields / numDataFields
 	}

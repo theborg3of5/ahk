@@ -5,22 +5,27 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Prompt the user to choose one or more internal environments using a Selector.
 	; PARAMETERS:
-	;  selectorTitle       (I,OPT) - The title for the Selector.
-	;  selectorIcon        (I,OPT) - The icon to use for the Selector popup.
-	;  selectorExtraFields (I,OPT) - If you want to add extra fields to the Selector popup, pass an 
-	;                                associative array {fieldName: defaultValue} of them here.
+	;  selectorTitle         (I,OPT) - The title for the Selector.
+	;  selectorIcon          (I,OPT) - The icon to use for the Selector popup.
+	;  selectorExtraFields   (I,OPT) - If you want to add extra fields to the Selector popup, pass
+	;                                  an array of field names here.
+	;  selectorDefaultValues (I,OPT) - If you want to default values into the Selector popup
+	;                                  fields, pass an associative array {fieldName: defaultValue}
+	;                                  of them here.
 	; RETURNS:        Array of environment data arrays (or null if the user didn't accept)
 	;---------
-	selectEpicEnvironments(selectorTitle, selectorIcon := "", extraFields := "") {
+	selectEpicEnvironments(selectorTitle, selectorIcon := "", selectorExtraFields := "", selectorDefaultValues := "") {
 		; Set up Selector
 		s := new Selector("epicEnvironments.tls")
 		if(selectorTitle != "")
 			s.setTitle(selectorTitle)
 		if(selectorIcon != "")
 			s.setIcon(selectorIcon)
-		if(extraFields != "")
-			s.addOverrideFields(extraFields.toKeysArray()).setDefaultOverrides(extraFields)
-		
+		if(selectorExtraFields != "")
+			s.addOverrideFields(selectorExtraFields)
+		if (selectorDefaultValues)
+			s.setDefaultOverrides(selectorDefaultValues)
+
 		; Show the popup and get user input
 		environments := s.promptMulti()
 		if(!environments)
@@ -794,7 +799,7 @@ class EpicLib {
 	;---------
 	selectFromEMC2RecordMatches(exacts, possibles) {
 		abbrevsCache := []
-		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
+		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields(["INI"])
 		
 		s.addSectionHeader("Full matches")
 		For _,record in exacts

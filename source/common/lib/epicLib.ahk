@@ -541,7 +541,10 @@ class EpicLib {
 		this.addFolderChoicesForType(s, folders, "Integration")
 		
 		s.addSectionHeader("Claude")
-		s.addChoice(new SelectorChoice({ NAME: "Top", ABBREV: "c", PATH: "C:\EpicSource\claude" }))
+		s.addChoice(new SelectorChoice({ NAME: "Claude Top", ABBREV: "c", PATH: "C:\EpicSource\claude" }))
+		
+		s.addSectionHeader("Server")
+		s.addChoice(new SelectorChoice({ NAME: "Server Top", ABBREV: "ess", PATH: "C:\EpicSource\Server" }))
 
 		this.addFolderChoicesForType(s, folders, "GitLab")
 		this.addFolderChoicesForType(s, folders, "CloudLab", true)

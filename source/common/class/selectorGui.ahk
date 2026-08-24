@@ -375,7 +375,7 @@ class SelectorGui {
 		; Override fields
 		For num,label in this.overrideFields {
 			inputVal := GuiLib.getDynamicGlobal(this.fieldVar_OverridesPrefix label) ; Global value set by Gui, Submit
-			if(inputVal && (inputVal != label))
+			if((inputVal != "") && (inputVal != label))
 				this.overrideData[label] := inputVal
 		}
 	}

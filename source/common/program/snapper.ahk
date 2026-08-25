@@ -138,7 +138,7 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Diff the selected multi-response item values using KDiff, stripping off line numbers and whitespace.
+	; DESCRIPTION:    Diff the selected multi-response item values, stripping off line numbers and whitespace.
 	;---------
 	diffMultiResponseValues() {
 		; Get input
@@ -209,7 +209,7 @@
 		}
 
 		; Diff it!
-		Config.runProgram("KDiff", pathLeft " " pathMiddle " " pathRight)
+		Config.runProgram("Beyond Compare", "/solo /readonly " pathLeft " " pathRight " " pathMiddle)
 	}
 	
 	;---------

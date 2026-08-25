@@ -10,6 +10,7 @@
 		Hyperdrive					Epic\Hyperdrive\VersionIndependent\Hyperspace.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
+		Beyond Compare				Beyond Compare 5\BCompare.exe
 		Chrome						Google\Chrome\Application\chrome.exe
 		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe
 		Everything					Everything\Everything.exe

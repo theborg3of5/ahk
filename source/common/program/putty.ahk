@@ -151,14 +151,24 @@ class Putty {
 			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " portalUrl, stderr, exitCode)
 		}
 
-		if (traceId = "") {
+		while (traceId = "") {
 			pt.endStep("Failed!")
-			pt.finish("Failed to get trace ID")
 
+			if (stderr.contains("No trace ID found in the response")) {
+				if (GuiLib.showConfirmationPopup("No trace ID found yet (the trace may still be generating).`n`nRetry?", "Trace Lookup")) {
+					pt.nextStep("Querying " portalEnv " factory via WSL")
+					traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " portalURL, stderr, exitCode)
+					continue
+				}
+				
+				pt.finish("No trace ID found")
+				return
+			}
+
+			pt.finish("Failed to get trace ID")
 			tt := new TextTable("Failed to get trace ID from WSL")
 			tt.addRow(stderr)
 			new TextPopup(tt).show()
-
 			return
 		}
 		clipboard := traceId

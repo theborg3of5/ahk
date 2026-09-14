@@ -26,15 +26,15 @@ Send, ^+p ; Open command palette
 ClipboardLib.send("extension.updateCustomCSS") ; "Reload Custom CSS and JS" command ID
 Send, {Enter}
 
-pt.nextStep("Waiting for restart prompt notification (press Enter or click when it appears)")
+pt.nextStep("Waiting for restart prompt notification (press Enter when it appears)")
 moveMouseToBottomRightOffset(100, 60)
-waitForUserButton(pt)
+waitForUserEnter(pt)
 
-pt.nextStep("Waiting for ""corrupted"" notification (press Enter or click when it appears)")
+pt.nextStep("Waiting for ""corrupted"" notification (press Enter when it appears)")
 moveMouseToBottomRightOffset(60, 100) ; Gear icon
-waitForUserButton(pt)
+waitForUserEnter(pt)
 moveMouseToBottomRightOffset(100, 70) ; Ignore option
-waitForUserButton(pt)
+waitForUserEnter(pt)
 
 pt.nextStep("Exiting VSCode")
 WinClose, ahk_exe Code.exe
@@ -43,24 +43,13 @@ WinWaitClose, ahk_exe Code.exe
 pt.finish()
 ExitApp
 
-; Notice when the mouse is clicked without blocking it, for when we're waiting for enter or click.
-~LButton::
-	mouseClicked := true
-return
-
-; Wait for the user to click a button (or press Enter, which will also click it)
-waitForUserButton(pt) {
-	mouseClicked := false ; So we can tell when the user clicks while we're waiting
-	
+; Wait for the user to press Enter
+waitForUserEnter(pt) {
 	; Wait for Enter or click
 	Loop {
 		; Wait for Enter (check every 0.5s)
 		KeyWait, Enter, D T0.5
 		if (ErrorLevel = 0)
-			Break
-		
-		; Also check if the user clicked
-		if (mouseClicked)
 			Break
 	}
 
@@ -74,13 +63,10 @@ waitForUserButton(pt) {
 	if (!WinActive("ahk_exe Code.exe")) {
 		pt.nextStep("VSCode focus lost, refocus to continue")
 		WinWaitActive, ahk_exe Code.exe
-		Click ; Always click in this case, because if the user clicked it wasn't on the right window
-		return
 	}
 	
-	; Click if the user didn't already (clicking is a pass-through)
-	if (!mouseClicked)
-		Click
+	; Click on the button
+	Click
 }
 
 ; Move the mouse to the given distances from the bottom-right corner of the window.

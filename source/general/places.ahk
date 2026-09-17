@@ -67,14 +67,6 @@ $!+c::
 $^!+f::Run("http://feedly.com/i/latest")
 ^!+m:: Config.runProgram("Gmail")
 ^!+#m::Config.runProgram("Messenger")
-^!+a::
-openUsualSites() {
-	Config.runProgram("Gmail")
-	Sleep, 100
-	Run("https://lemmy.world/")
-	Sleep, 100
-	Run("http://feedly.com/i/latest")
-}
 
 ; OneNote Online
 !+t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])

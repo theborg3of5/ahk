@@ -5,10 +5,10 @@
 #e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 #s::  Config.runProgram("Slack")
 #p::  Config.activateProgram("MTPutty")
+^!+a::VSCode.activateCode("AHK", Config.path["AHK_ROOT"] "\admin\ahk.code-workspace")
 ^!+g::Config.activateProgram("Chrome")
 ^!+n::Config.activateProgram("Notepad++")
 ^!+t::Config.activateProgram("TickTick")
-^!#a::VSCode.activateCode("AHK", Config.path["AHK_ROOT"] "\admin\ahk.code-workspace")
 ^!#t::Config.runProgram("Teams")
 ^!#v::Config.runProgram("VSCode", "--profile Default")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
@@ -20,7 +20,8 @@
 	^!+e:: Config.activateProgram("EMC2", "EMC2Update") ; EMC2 needs this parameter to start up correctly.
 	^!+s:: VSCode.activateCode("EpicCode", Config.path["USER_ROOT"] "\EpicCode\EpicCode.code-workspace")
 	^!+u:: Config.activateProgram("Thunder")
-	^!+x:: VSCode.activateCode("VSCode", "--profile EpicCode --folder-uri file:///" Config.path["EPIC_SOURCE_SERVER"] "\XGDB")
+	^!+x:: VSCode.launchCode("EpicCode", "--folder-uri file:///" Config.path["EPIC_SOURCE_SERVER"] "\XGDB")
+	^!+.:: VSCode.activateCode("Bash", "--folder-uri file:///" Config.path["USER_ROOT"] "\dotfiles")
 	^!#+v::Config.runProgram("Visual Studio")
 #If
 

@@ -540,18 +540,15 @@ class EpicLib {
 		this.addFolderChoicesForType(s, folders, "SUs", true)
 		this.addFolderChoicesForType(s, folders, "Integration")
 		
-		s.addSectionHeader("Claude")
-		s.addChoice(new SelectorChoice({ NAME: "Claude Top", ABBREV: "c", PATH: "C:\EpicSource\claude" }))
-		
-		s.addSectionHeader("Server")
-		s.addChoice(new SelectorChoice({ NAME: "Server Top", ABBREV: "ess", PATH: "C:\EpicSource\Server" }))
-
-		this.addFolderChoicesForType(s, folders, "GitLab")
 		this.addFolderChoicesForType(s, folders, "CloudLab", true)
+		this.addFolderChoicesForType(s, folders, "GitLab")
 		
-		s.addSectionHeader("Special")
-		s.addChoice(new SelectorChoice({ NAME: "Launch", ABBREV: "l", PATH: "LAUNCH" }))
-
+		s.addSectionHeader("! Other") ; ! starts new column
+		s.addChoice(new SelectorChoice({ NAME: "XGDB",       ABBREV: "x",   PATH: "\\epic-nfs\nfs_ask\gborg\XGDB" }))
+		s.addChoice(new SelectorChoice({ NAME: "Claude Top", ABBREV: "c",   PATH: "C:\EpicSource\claude" }))
+		s.addChoice(new SelectorChoice({ NAME: "Server Top", ABBREV: "ess", PATH: "C:\EpicSource\Server" }))
+		s.addChoice(new SelectorChoice({ NAME: "Launch",     ABBREV: "l",   PATH: "LAUNCH" }))
+		
 		return s.promptMulti("PATH")
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------

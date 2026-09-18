@@ -174,13 +174,11 @@ class VSCode {
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
 	copyCleanEpicCodeLocation() {
-		HotkeyLib.releaseAllModifiers()
-		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
-		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
+		codeLocation := this.getEpicCodeLineLocation()
 
 		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
-		
+
 		; If we got "routine^routine", just return "^routine".
 		tag     := codeLocation.beforeString("^")
 		routine := codeLocation.afterString("^")
@@ -196,9 +194,7 @@ class VSCode {
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
 	copyEpicRoutineName() {
-		HotkeyLib.releaseAllModifiers()
-		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
-		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
+		codeLocation := this.getEpicCodeLineLocation()
 
 		; Split off the routine
 		EpicLib.splitServerLocation(codeLocation, routine)
@@ -207,22 +203,25 @@ class VSCode {
 		ClipboardLib.setAndToast("^" routine, "routine name")
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
-
 	;region ------------------------------ PRIVATE ------------------------------
 	;---------
-	; DESCRIPTION:    Currently in Workspaces, the copy-code command includes the full routine file path
-	;                 (minus the extension). Until that's fixed, clean it out manually here.
-	; PARAMETERS:
-	;  codeLocation (I,REQ) - Code location to fix
-	; RETURNS:        Fixed code location
+	; DESCRIPTION:    For some reason, EpicCode sets the clipboard twice when you copy the line location
+	;                 - the first time with just the text, the second with the HTML link. Since we don't
+	;                 want the link and want to be able to reuse the clipboard without being
+	;                 overwritten, we have to wait until it finishes both before moving on.
+	; RETURNS:        Copied line location
 	;---------
-	fixEpicCodeRoutine(codeLocation) {
-		tag     := codeLocation.beforeString("^")
-		routine := codeLocation.afterString("^")
+	getEpicCodeLineLocation() {
+		HotkeyLib.releaseAllModifiers()
 
-		routine := routine.afterString("/", true) ; Drop everything before the actual file/routine
+		; This waits for the first addition (which gives us the text we want)
+		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
 
-		return tag "^" routine
+		; Then we immediately clear the clipboard again and wait for it to be set
+		Clipboard := ""
+		ClipWait, 5000 ; Wait up to 5s
+
+		return codeLocation
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

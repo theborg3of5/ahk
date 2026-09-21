@@ -201,7 +201,7 @@ class Putty {
 		; Wait for the popup to show up
 		WinWaitActive, ahk_class PuTTYConfigBox
 		
-		Send, !g ; Category pane
+		Send, {Tab 6} ; Category pane (apparently !g doesn't work anymore)
 		Send, l  ; Logging tree node
 		Sleep, 500
 		Send, !f ; Log file name field

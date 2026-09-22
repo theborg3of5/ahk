@@ -110,6 +110,9 @@
 ::.asig::and so it goes, and so it goes, and you're the only one who knows...
 
 ::.shrug::¯\_(ツ)_/¯
+
+; Collapsible section for use in gitlab MRs
+::.glsection::<details><summary>Checklists</summary>`n</details>{Home}
 ;endregion Expansions
 
 ;region Date and time

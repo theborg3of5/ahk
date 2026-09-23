@@ -6,14 +6,13 @@
 ~PRESET.defaultTo(NORMAL) | X.defaultTo(CENTERED) | Y.defaultTo(CENTERED) {
 	~MONITOR.replaceWith(LEFT) {
 			Outlook						-				-				MAX			MAX			WORK
-			; Work Explorer is a little further left to allow Outlook calendar pane to peek thru nicely.
-			Explorer					-				-				1440		900
-			GitHub Desktop				-				-				1440		900
-			GrepWin						-				-				1440		900
-			Steam						-				-				1440		900			HOME
+		~WIDTH.defaultTo(75%) | HEIGHT.defaultTo(75%) {
+			Explorer
+			GitHub Desktop
+			GrepWin
+			Steam						-				-				-			-			HOME
 			Snapper
 		
-		~WIDTH.defaultTo(1440) | HEIGHT.defaultTo(900) {
 			; Main window for Teams (the generic Teams window covers meetings instead)
 			Teams Activity				-				-				-			-			WORK
 			Teams Chat					-				-				-			-			WORK
@@ -21,13 +20,14 @@
 			Teams Calls					-				-				-			-			WORK
 		}
 		
-			TickTick					RIGHT_EDGE		TOP_EDGE		1200		100%
-			Putty						RIGHT_EDGE		TOP_EDGE		1350		100%		WORK
-			MTPutty						RIGHT_EDGE		TOP_EDGE		1440		100%		WORK
-			Windows Terminal			RIGHT_EDGE		TOP_EDGE		1440		100%
+		~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) | ~WIDTH.defaultTo(70%) | ~HEIGHT.defaultTo(100%) {
+			TickTick
+			MTPutty						-				-				-			-			WORK
+			Windows Terminal
+		}
 		
 # Social windows
-		~WIDTH.defaultTo(950) | ~HEIGHT.defaultTo(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
+		~WIDTH.defaultTo(55%) | ~HEIGHT.defaultTo(75%) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
 			Beeper						-				-				65%			100%
 			Messenger
 			Slack
@@ -37,9 +37,8 @@
 	
 	~MONITOR.replaceWith(MIDDLE) {
 			Chrome						-				-				MAX			MAX
-			Chrome Hyperspace			-				-				1920		1080		WORK
-			Hyperdrive					-				-				1920		1080		WORK
-			Process Explorer			-				-				1440		900
+			Chrome Hyperspace			-				-				2560		1440		WORK
+			Hyperdrive					-				-				2560		1440		WORK
 			Visual Studio				-				-				MAX			MAX			WORK
 			VSCode						-				-				MAX			MAX			WORK
 			Zoom						-				-				MAX			MAX			HOME

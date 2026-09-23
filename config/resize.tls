@@ -8,6 +8,7 @@
 (	0										0				1			2			0		)
 
 # General sizes
+	Bigger (2560x1440)						b				2560		1440
 	FHD (1920x1080)							h | hd			1920		1080
 	Widescreen (1440x900)					w				1440		900
 	Standard (1280x1024)					sd				1280		1024

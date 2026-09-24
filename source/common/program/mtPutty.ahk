@@ -35,7 +35,7 @@
 		
 		; The user can hit the ^` hotkey to get back to the tab, but for some reason AHK can't, so 
 		; we resort to just clicking inside.
-		MouseLib.clickAndReturn(100, 100, "Window")
+		MouseLib.clickAndReturn(150, 150, "Window")
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

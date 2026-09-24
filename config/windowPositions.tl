@@ -37,8 +37,8 @@
 	
 	~MONITOR.replaceWith(MIDDLE) {
 			Chrome						-				-				MAX			MAX
-			Chrome Hyperspace			-				-				2560		1440		WORK
-			Hyperdrive					-				-				2560		1440		WORK
+			Chrome Hyperspace			-				-				75%			75%			WORK
+			Hyperdrive					-				-				75%			75%			WORK
 			Visual Studio				-				-				MAX			MAX			WORK
 			VSCode						-				-				MAX			MAX			WORK
 			Zoom						-				-				MAX			MAX			HOME

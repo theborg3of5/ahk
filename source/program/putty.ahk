@@ -21,9 +21,11 @@
 		Putty.wipeScreen()                             ; Wipe the screen
 	return
 	
-	; Scroll 1 line at a time
-	^WheelUp::  Send, ^{PgUp}
-	^WheelDown::Send, ^{PgDn}
+	; Scroll 1 line at a time by default, hold Ctrl to scroll half a page at a time (Putty's default)
+	$WheelUp::  Send, ^{PgUp}
+	$WheelDown::Send, ^{PgDn}
+	^WheelUp::  Send, {WheelUp}
+	^WheelDown::Send, {WheelDown}
 	
 	; Search within record edit screens
 	^F9::Putty.recordEditSearch()

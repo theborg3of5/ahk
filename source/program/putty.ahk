@@ -11,16 +11,6 @@
 	^l::Putty.wipeScreen()
 	^+l::Putty.wipeScreen(true)
 	
-	; Get out of Chronicles
-	^d::
-		Send, +{F7 3}                                  ; Get out of (potentially-nested) open records
-		Send, {PgDn 3}                                 ; Get out to main menu
-		Send, quit{Enter}                              ; Exit
-		SendRaw, % Config.private["EPIC_LOOKITT"] "`n" ; Get back into Lookitt (in case we left)
-		Sleep, 100
-		Putty.wipeScreen()                             ; Wipe the screen
-	return
-	
 	; Scroll 1 line at a time by default, hold Ctrl to scroll half a page at a time (Putty's default)
 	$WheelUp::  Send, ^{PgUp}
 	$WheelDown::Send, ^{PgDn}
@@ -41,15 +31,18 @@
 	:X:.clip::SendRaw, % Putty.getClipboardAsMString()
 	
 	; Send specific commands (extra spaces between quotes are purely for readability)
-	^z:: SendRaw, % Config.private["EPIC_LOOKITT"] "`n"
+	^d:: SendRaw, % ";dbcutil" "`n"
 	^e:: SendRaw, % "e " ; Chronicles
-	^s:: SendRaw, % ";set"   "`n"
-	^o:: SendRaw, % ";top"   "`n"
-	^r:: SendRaw, % ";kecr"  "`n"
-	^h:: SendRaw, % ";hb"    "`n"
-	^+r::SendRaw, % ";rstat" "`n"
-	^+h::SendRaw, % ";hstat" "`n"
-	^+e::SendRaw, % ";v"     "`n"
+	^h:: SendRaw, % ";hb"      "`n"
+	^o:: SendRaw, % ";top"     "`n"
+	^r:: SendRaw, % ";kecr"    "`n"
+	^s:: SendRaw, % ";set"     "`n"
+	^u:: SendRaw, % ";hbutil"  "`n"
+	^z:: SendRaw, % Config.private["EPIC_LOOKITT"] "`n"
+	^+e::SendRaw, % ";v"       "`n"
+	^+h::SendRaw, % ";hstat"   "`n"
+	^+r::SendRaw, % ";rstat"   "`n"
+
 	::;je :: ; Include a space so default use of macro (to jump into list) doesn't trigger this
 		examineJob() {
 			; Prompt for process ID

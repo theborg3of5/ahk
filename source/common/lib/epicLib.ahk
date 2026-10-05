@@ -522,7 +522,20 @@ class EpicLib {
 		{
 			cat := "CloudLab"
 			name := A_LoopFileName
-			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName, ["ao-", "agent-orchestration-"])
+			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName, ["ao-", "agent-orchestration-", "css-"])
+			
+			if(!folders[cat])
+				folders[cat] := []
+			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
+		}
+
+		; Also pull from the cloudlab folder in WSL
+		wslRoot := Config.path["WSL_EPIC_SOURCE_ROOT"]
+		Loop, Files, %wslRoot%\cloudlab\*, D
+		{
+			cat := "CloudLab WSL"
+			name := A_LoopFileName
+			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName, ["ao-", "agent-orchestration-", "css-"])
 			
 			if(!folders[cat])
 				folders[cat] := []
@@ -540,14 +553,16 @@ class EpicLib {
 		this.addFolderChoicesForType(s, folders, "SUs", true)
 		this.addFolderChoicesForType(s, folders, "Integration")
 		
-		this.addFolderChoicesForType(s, folders, "CloudLab", true)
-		this.addFolderChoicesForType(s, folders, "GitLab")
-		
-		s.addSectionHeader("! Other") ; ! starts new column
+		s.addSectionHeader("Other")
 		s.addChoice(new SelectorChoice({ NAME: "XGDB",       ABBREV: "x",   PATH: "\\epic-nfs\nfs_ask\gborg\XGDB" }))
 		s.addChoice(new SelectorChoice({ NAME: "Claude Top", ABBREV: "c",   PATH: "C:\EpicSource\claude" }))
 		s.addChoice(new SelectorChoice({ NAME: "Server Top", ABBREV: "ess", PATH: "C:\EpicSource\Server" }))
 		s.addChoice(new SelectorChoice({ NAME: "Launch",     ABBREV: "l",   PATH: "LAUNCH" }))
+		
+		this.addFolderChoicesForType(s, folders, "GitLab")
+		
+		this.addFolderChoicesForType(s, folders, "CloudLab", true)
+		this.addFolderChoicesForType(s, folders, "CloudLab WSL")
 		
 		return s.promptMulti("PATH")
 	}

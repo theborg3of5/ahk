@@ -67,18 +67,22 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	;endregion TLG record IDs
 
 	!+e::
-		openEpicSourceFolder() {
+		selectESFolder() {
 			For _, path in EpicLib.selectEpicSourceFolders("Select branch folder to open:", Config.getProgramPath("Explorer"))
 				Run(path)
 		}
 	
 	^!#r::
-		openTerminalInEpicSourceFolder() {
+		selectTerminal() {
+			wslRoot := Config.path["WSL_EPIC_SOURCE_ROOT"]
 			For _, path in EpicLib.selectEpicSourceFolders("Select branch folder to open in terminal:", "C:\Program Files\Git\git-bash.exe") {
 				if(path = "LAUNCH")
 					path := "C:\EpicSource"
-				
-				Config.runProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " path)
+
+				args := "--profile ""Git Bash"" --startingDirectory " path
+				if(path.startsWith(wslRoot))
+					args .= " wsl.exe"
+				Config.runProgram("Windows Terminal", args)
 			}
 		}
 	

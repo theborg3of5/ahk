@@ -179,12 +179,12 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			; Wait for the windows to initialize - otherwise their titles with $J don't come through
 			; even with fixPuttyTabTitle below.
 			expectedCount := startCount + environments.length()
-			Loop, 5 {
+			Loop, 40 {
 				newCount := WindowLib.countMatchingWindows("$J: ahk_exe Putty.exe", TitleMatchMode.Contains)
 				if (newCount >= expectedCount)
 					Break ; Windows are all initialized
 
-				Sleep, 1000 ; Wait for the window(s) to open/initialize
+				Sleep, 500 ; Wait for the window(s) to open/initialize
 			}
 			Sleep, 100 ; Wait a tick more to ensure the titles are set properly.
 			MTPutty.attachOrphanedPuttyWindows() ; Only fixes the focused tab, but I can do any others manually if needed.

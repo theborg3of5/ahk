@@ -11,12 +11,6 @@
 	^l::Putty.wipeScreen()
 	^+l::Putty.wipeScreen(true)
 	
-	; Scroll 1 line at a time by default, hold Ctrl to scroll half a page at a time (Putty's default)
-	$WheelUp::  Send, ^{PgUp}
-	$WheelDown::Send, ^{PgDn}
-	^WheelUp::  Send, {WheelUp}
-	^WheelDown::Send, {WheelDown}
-	
 	; Search within record edit screens
 	^F9::Putty.recordEditSearch()
 	^g:: Putty.recordEditSearch(true)
@@ -56,6 +50,14 @@
 	:X:;trace:: Putty.lookupTrace("DEV")
 	:X:;qtrace::Putty.lookupTrace("QA")
 	:X:;ftrace::Putty.lookupTrace("FINAL")
+
+; Limit this to when the mouse is over putty so we don't block scrolling other programs while Putty is active.
+#If Config.isWindowActive("Putty") && Config.isMouseOverWindow("Putty")
+	; Scroll 1 line at a time by default, hold Ctrl to scroll half a page at a time (Putty's default)
+	$WheelUp::  Send, ^{PgUp}
+	$WheelDown::Send, ^{PgDn}
+	^WheelUp::  Send, {WheelUp}
+	^WheelDown::Send, {WheelDown}
 
 ; MTPutty pass-throughs
 #If Config.isWindowActive("Putty") && Config.doesWindowExist("MTPutty")

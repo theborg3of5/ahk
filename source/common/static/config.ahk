@@ -164,6 +164,17 @@ class Config {
 	windowMatchesInfo(titleString, name) {
 		return this.windowInfo[name].windowMatches(titleString)
 	}
+
+	;---------
+	; DESCRIPTION:    Check whether the window currently under the mouse, matches the give window name.
+	; PARAMETERS:
+	;  name (I,REQ) - Name of the WindowInfo to compare it to
+	; RETURNS:        true/false - does it match?
+	;---------
+	isMouseOverWindow(name) {
+		idString := WindowLib.getIdTitleStringUnderMouse()
+		return this.windowMatchesInfo(idString,name)
+	}
 	
 	;---------
 	; DESCRIPTION:    Find the WindowInfo instance that matches the specified window.

@@ -27,13 +27,13 @@ ClipboardLib.send("extension.updateCustomCSS") ; "Reload Custom CSS and JS" comm
 Send, {Enter}
 
 pt.nextStep("Waiting for restart prompt notification (press Enter when it appears)")
-moveMouseToBottomRightOffset(100, 60)
+moveMouseToBottomRightOffset(145, 95)
 waitForUserEnter(pt)
 
 pt.nextStep("Waiting for ""corrupted"" notification (press Enter when it appears)")
-moveMouseToBottomRightOffset(60, 100) ; Gear icon
+moveMouseToBottomRightOffset(90, 145) ; Gear icon
 waitForUserEnter(pt)
-moveMouseToBottomRightOffset(100, 70) ; Ignore option
+moveMouseToBottomRightOffset(200, 100) ; Ignore option
 waitForUserEnter(pt)
 
 pt.nextStep("Exiting VSCode")

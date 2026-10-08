@@ -12,7 +12,7 @@
 			GrepWin
 			Steam						-				-				-			-			HOME
 			Snapper
-		
+			
 			; Main window for Teams (the generic Teams window covers meetings instead)
 			Teams Activity				-				-				-			-			WORK
 			Teams Chat					-				-				-			-			WORK

@@ -12,13 +12,17 @@ return
 ; Open - open a variety of different things based on the selected text.
 ^!#o:: new ActionObject(SelectLib.getText()).openWeb()
 ^!#+o::new ActionObject(SelectLib.getText()).openEdit()
-#o::   new ActionObject(SelectLib.getText()).openWeb()  ; Work keyboard blocks everything with #!o, so here are some alternatives.
-#+o::  new ActionObject(SelectLib.getText()).openEdit() 
+^#o::  new ActionObject(SelectLib.getText()).openWeb()  ; Work keyboard blocks everything with #!o, so here are some alternatives.
+^#+o:: new ActionObject(SelectLib.getText()).openEdit()
+#o::   new ActionObject(SelectLib.getText()).openWeb()
+#+o::  new ActionObject(SelectLib.getText()).openEdit()
 
 
 ; Copy link - copy links to a variety of different things based on the selected text.
 ^!#l:: new ActionObject(SelectLib.getText()).copyLinkWeb()
 ^!#+l::new ActionObject(SelectLib.getText()).copyLinkEdit()
+^#l::  new ActionObject(SelectLib.getText()).copyLinkWeb()  ; Work keyboard blocks everything with #!l, so here are some alternatives.
+^#+l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 
 ; Hyperlink - get link based on the selected text and then apply it to that same text.
 ^!#k:: new ActionObject(SelectLib.getText()).linkSelectedTextWeb()

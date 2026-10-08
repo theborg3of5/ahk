@@ -112,7 +112,11 @@
 ::.shrug::¯\_(ツ)_/¯
 
 ; Collapsible section for use in gitlab MRs
-::.glsection::<details><summary>Checklists</summary>`n</details>{Home}
+::.glsection::
+	Send, % "<details><summary>`n`n"
+	SendRaw, % "# TITLE" ; Have to use SendRaw to get the #
+	Send, % "`n`n</summary>`n`nDEETS`n`n</details>"
+return
 ;endregion Expansions
 
 ;region Date and time

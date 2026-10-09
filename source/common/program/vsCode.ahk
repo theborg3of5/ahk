@@ -174,7 +174,7 @@ class VSCode {
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
 	copyCleanEpicCodeLocation() {
-		codeLocation := this.getEpicCodeLineLocation()
+		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
 
 		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
@@ -194,7 +194,7 @@ class VSCode {
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
 	copyEpicRoutineName() {
-		codeLocation := this.getEpicCodeLineLocation()
+		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
 
 		; Split off the routine
 		EpicLib.splitServerLocation(codeLocation, routine)
@@ -203,25 +203,4 @@ class VSCode {
 		ClipboardLib.setAndToast("^" routine, "routine name")
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
-	;region ------------------------------ PRIVATE ------------------------------
-	;---------
-	; DESCRIPTION:    For some reason, EpicCode sets the clipboard twice when you copy the line location
-	;                 - the first time with just the text, the second with the HTML link. Since we don't
-	;                 want the link and want to be able to reuse the clipboard without being
-	;                 overwritten, we have to wait until it finishes both before moving on.
-	; RETURNS:        Copied line location
-	;---------
-	getEpicCodeLineLocation() {
-		HotkeyLib.releaseAllModifiers()
-
-		; This waits for the first addition (which gives us the text we want)
-		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile, -1)
-
-		; Then we immediately clear the clipboard again and wait for it to be set
-		Clipboard := ""
-		ClipWait, 5000 ; Wait up to 5s
-
-		return codeLocation
-	}
-	;endregion ------------------------------ PRIVATE ------------------------------
 }

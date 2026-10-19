@@ -553,10 +553,13 @@ class EpicLib {
 		this.addFolderChoicesForType(s, folders, "SUs", true)
 		this.addFolderChoicesForType(s, folders, "Integration")
 		
-		s.addSectionHeader("Other")
-		s.addChoice(new SelectorChoice({ NAME: "XGDB",       ABBREV: "x",   PATH: "\\epic-nfs\nfs_ask\gborg\XGDB" }))
-		s.addChoice(new SelectorChoice({ NAME: "Claude Top", ABBREV: "c",   PATH: "C:\EpicSource\claude" }))
+		s.addSectionHeader("Server")
 		s.addChoice(new SelectorChoice({ NAME: "Server Top", ABBREV: "ess", PATH: "C:\EpicSource\Server" }))
+		s.addChoice(new SelectorChoice({ NAME: "XGDB",       ABBREV: "x",   PATH: "C:\EpicSource\Server\XGDB" }))
+
+		s.addSectionHeader("Other")
+		s.addChoice(new SelectorChoice({ NAME: "XGDB Sync",  ABBREV: "xs",  PATH: "\\epic-nfs\nfs_ask\gborg\XGDB" }))
+		s.addChoice(new SelectorChoice({ NAME: "Claude Top", ABBREV: "c",   PATH: "C:\EpicSource\claude" }))
 		s.addChoice(new SelectorChoice({ NAME: "Launch",     ABBREV: "l",   PATH: "LAUNCH" }))
 		
 		this.addFolderChoicesForType(s, folders, "GitLab")

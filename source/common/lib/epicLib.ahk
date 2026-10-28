@@ -560,6 +560,7 @@ class EpicLib {
 		s.addSectionHeader("Other")
 		s.addChoice(new SelectorChoice({ NAME: "XGDB Sync",  ABBREV: "xs",  PATH: "\\epic-nfs\nfs_ask\gborg\XGDB" }))
 		s.addChoice(new SelectorChoice({ NAME: "Claude Top", ABBREV: "c",   PATH: "C:\EpicSource\claude" }))
+		s.addChoice(new SelectorChoice({ NAME: "Dotfiles",   ABBREV: "dot", PATH: Config.path["USER_ROOT"] "\dotfiles" }))
 		s.addChoice(new SelectorChoice({ NAME: "Launch",     ABBREV: "l",   PATH: "LAUNCH" }))
 		
 		this.addFolderChoicesForType(s, folders, "GitLab")

@@ -108,36 +108,38 @@ class Putty {
 	;---------
 	; DESCRIPTION:    Convert the selected Sous execution ID to a trace ID and launch the trace 
 	;                 portal for it.
-	; PARAMETERS:
-	;  deployment (I,OPT) - DEV, QA, or FINAL for which deployment to use. Defaults to DEV.
+	;                 The selection must be "<execId>.<chroniclesEnv>.<portalEnv>" (period-separated):
+	;                  - chroniclesEnv is the 32-hex-digit GUID of the Chronicles environment the trace
+	;                    came from.
+	;                  - portalEnv is the Factory portal environment (foundry, int-st-dev-ci,
+	;                    int-st-qa-ci).
+	;                 Shows an error toast (and does nothing else) if any of the three are missing.
 	;---------
-	lookupTrace(deployment := "DEV") {
-		; Map deployment to the portal environment name (for URLs) and CF deployment name (for login).
-		if (deployment = "DEV") {
-			portalEnv := "foundry"
-			cfDeployment := "int-foundry"
-		} else if (deployment = "QA") {
-			portalEnv := "int-st-dev-ci"
-			cfDeployment := "int-st-dev-ci"
-		} else if (deployment = "FINAL") {
-			portalEnv := "int-st-qa-ci"
-			cfDeployment := "int-st-qa-ci"
-		}
-
-		pt := new ProgressToast("Finding trace ID from ExecID")
-		pt.nextStep("Getting execId")
-
-		execId := SelectLib.getText()
-		if(execId = "") {
-			pt.finish("No execId found")
+	lookupTrace() {
+		; Selection is the execution ID, Chronicles environment, and portal environment.
+		selection     := SelectLib.getText()
+		selectedParts := selection.split(".", " `t`r`n") ; Drop any stray whitespace/newlines around each piece
+		execId        := selectedParts[1]
+		chroniclesEnv := selectedParts[2]
+		portalEnv     := selectedParts[3]
+		if(execId = "" || chroniclesEnv = "" || portalEnv = "") {
+			Toast.ShowError("Could not look up trace", "Selection must be ""<execId>.<chroniclesEnv>.<portalEnv>"", got: " selection)
 			return
 		}
-		pt.endStep(execId)
+
+		pt := new ProgressToast("Finding trace ID for ExecID " execId)
+
+		; CF deployment names (for login) match the portal environment names, except for foundry.
+		if (portalEnv = "foundry")
+			cfDeployment := "int-foundry"
+		else
+			cfDeployment := portalEnv
 
 		pt.nextStep("Querying " portalEnv " factory via WSL")
 		; Actual query happens in WSL, as that's where the auth stuff we need lives.
 		portalURL := Config.private["EPIC_FACTORY_PORTAL_URL_BASE"].replaceTag("DEPLOYMENT", portalEnv)
-		traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " portalURL, stderr, exitCode)
+		lookupCommand := "wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " chroniclesEnv " " portalURL
+		traceId := RunLib.runReturn(lookupCommand, stderr, exitCode)
 
 		if (exitCode = 2) {
 			pt.endStep("Token expired")
@@ -148,7 +150,7 @@ class Putty {
 			pt.endStep("done")
 
 			pt.nextStep("Retrying trace lookup")
-			traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " portalUrl, stderr, exitCode)
+			traceId := RunLib.runReturn(lookupCommand, stderr, exitCode)
 		}
 
 		while (traceId = "") {
@@ -157,7 +159,7 @@ class Putty {
 			if (stderr.contains("No trace ID found in the response")) {
 				if (GuiLib.showConfirmationPopup("No trace ID found yet (the trace may still be generating).`n`nRetry?", "Trace Lookup")) {
 					pt.nextStep("Querying " portalEnv " factory via WSL")
-					traceId := RunLib.runReturn("wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " portalURL, stderr, exitCode)
+					traceId := RunLib.runReturn(lookupCommand, stderr, exitCode)
 					continue
 				}
 				

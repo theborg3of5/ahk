@@ -86,6 +86,7 @@ Object(params*) {
 	#Include windowLib.ahk
 
 #Include %A_LineFile%\..\program
+	#Include beyondCompare.ahk
 	#Include chrome.ahk
 	#Include ditto.ahk
 	#Include emc2.ahk

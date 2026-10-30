@@ -197,19 +197,12 @@
 			
 			outLines[column].push(line)
 		}
-		
-		; Put the blocks in files
-		pathLeft   := A_Temp "\ahkDiffLeft.txt"
-		pathMiddle := A_Temp "\ahkDiffMiddle.txt"
-		FileLib.replaceFileWithString(pathLeft,   outLines["LEFT"].join("`n"))
-		FileLib.replaceFileWithString(pathMiddle, outLines["MIDDLE"].join("`n"))
-		if (!DataLib.isNullOrEmpty(outLines["RIGHT"])) {
-			pathRight  := A_Temp "\ahkDiffRight.txt"
-			FileLib.replaceFileWithString(pathRight,  outLines["RIGHT"].join("`n"))
-		}
 
 		; Diff it!
-		Config.runProgram("Beyond Compare", "/solo /readonly " pathLeft " " pathRight " " pathMiddle)
+		leftString   := outLines["LEFT"].join("`n")
+		middleString := outLines["MIDDLE"].join("`n")
+		rightString  := outLines["RIGHT"].join("`n")
+		BeyondCompare.compareStringsReadOnly(leftString, middleString, rightString)
 	}
 	
 	;---------
@@ -240,7 +233,7 @@
 	;---------
 	removeDatFromMultiResponseValues(ByRef text) {
 		firstWord := text.beforeString(" ")
-		if(firstWord.isDigits() && firstWord.length() = 5) {
+		if(RegExMatch(firstWord, "^\d{5}(\.\d{2})?$")) { ; 5 digits, optionally followed by 2 decimal places
 			text := text.removeFromStart(firstWord " ")
 			return true
 		}

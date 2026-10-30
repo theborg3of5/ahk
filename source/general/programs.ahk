@@ -9,6 +9,7 @@
 ^!+g::Config.activateProgram("Chrome")
 ^!+n::Config.activateProgram("Notepad++")
 ^!+t::Config.activateProgram("TickTick")
+^!#b::BeyondCompare.compareStrings() ; Empty strings to open two empty files
 ^!#t::Config.runProgram("Teams")
 ^!#v::Config.runProgram("VSCode", "--profile Default")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")

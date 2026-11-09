@@ -279,6 +279,25 @@ class Config {
 	replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
+
+	;---------
+	; DESCRIPTION:    Build a path starting with a keyed path, and adding more onto the end. Handles
+	;                 missing/extra backslashes and the like.
+	; PARAMETERS:
+	;  pathKey    (I,REQ) - The key for the path you want.
+	;  restOfPath (I,OPT) - The rest of the path to add onto the end. If left blank we'll just return
+	;                       the keyed path (with no trailing backslash).
+	; RETURNS:        The full path, with no trailing backslashes.
+	;---------
+	buildPath(pathKey, restOfPath := "") {
+		path := this.path[pathKey].removeFromEnd("\")
+		if (path = "")
+			return ""
+		if (restOfPath = "")
+			return path
+
+		return path "\" restOfPath.removeFromStart("\")
+	}
 	;endregion Paths
 	
 	;region Programs

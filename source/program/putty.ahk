@@ -47,7 +47,8 @@
 			Send, `;je{Enter} ; Launch the job list using the actual macro.
 			Send, % "eP" jobId "`n" ; Jump into examining the provided job.
 		}
-	:X:;trace::Putty.lookupTrace()
+	:X:;trace::Putty.lookupTrace() ; Look up trace from execution ID
+	:X:;pullfile::Putty.pullFromFile() ; Run the ;pull macro using a cached version of its copy-paste script
 
 ; Limit this to when the mouse is over putty so we don't block scrolling other programs while Putty is active.
 #If Config.isWindowActive("Putty") && Config.isMouseOverWindow("Putty")

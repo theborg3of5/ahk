@@ -182,6 +182,30 @@ class Putty {
 
 		pt.finish()
 	}
+
+	;---------
+	; DESCRIPTION:    Run the ;pull macro using a cached version of its copy-paste script.
+	;---------
+	pullFromFile() {
+		zlFilePath := Config.buildPath("EPIC_SOURCE_XGDB", "XGDBSync-pull.epicscript")
+		if(!FileExist(zlFilePath)) {
+			Toast.ShowError("Could not find pull script file", zlFilePath)
+			return
+		}
+
+		script := FileRead(zlFilePath)
+		if(script = "") {
+			Toast.ShowError("Pull script file is empty", zlFilePath)
+			return
+		}
+
+		; The file uses LF-only line endings, but Putty only turns CRLF into the CR that ends a line in
+		; the terminal, so normalize to CRLF (without doubling up any CRs that are already there).
+		script := StrReplace(script, "`r`n", "`n")
+		script := StrReplace(script, "`n", "`r`n")
+
+		ClipboardLib.send(script, "+{Insert}") ; Putty pastes with Shift+Insert, not Ctrl+V
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------

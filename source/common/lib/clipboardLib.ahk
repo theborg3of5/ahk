@@ -370,11 +370,12 @@ class ClipboardLib {
 	;---------
 	; DESCRIPTION:    Send the provided text using the clipboard, restoring the clipboard afterwards.
 	; PARAMETERS:
-	;  value (I,REQ) - The text to send.
+	;  value      (I,REQ) - The text to send.
+	;  hotkeyKeys (I,OPT) - The keys to send in order to paste. Defaults to ^v (Ctrl+V).
 	;---------
-	send(value) {
+	send(value, hotkeyKeys := "^v") {
 		ClipboardLib.set(value, origClipboard)
-		Send, ^v   ; Paste the new value.
+		Send, % hotkeyKeys ; Paste the new value.
 		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)
 	}

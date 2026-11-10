@@ -60,6 +60,8 @@ class ScriptTrayInfo {
 		iconPath := Config.path["AHK_ROOT"] "\icons\" newIcon
 		if(!FileExist(iconPath)) ; Fallback to icons in same directory
 			iconPath := A_WorkingDir "\" newIcon
+		if(!FileExist(iconPath)) ; Fallback to a full path (can also be an EXE/DLL to pull the icon from)
+			iconPath := newIcon
 
 		if(!FileExist(iconPath))
 			return

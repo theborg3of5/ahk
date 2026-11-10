@@ -1,67 +1,72 @@
-﻿; gdbdoc
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+﻿; Update the InstanceSubscriptions SVN working copy, logging the result.
+;  Run with /install to register a daily scheduled task that runs this script.
+#Include <includeCommon>
+ScriptTrayInfo.Init("AHK: Update IC URL SVN repo", Config.getProgramPath("TortoiseSVN"))
 
-; ---- Settings ----
-WorkingCopy := "C:\EpicSource\InstanceSubscriptions"
-SvnExe      := "svn.exe"            ; or a full path if svn isn't on PATH
-TaskName    := "Update InstanceSubscriptions"
-RunTime     := "02:00"              ; 24-hour HH:mm
-LogFile     := A_ScriptDir . "\InstanceSubscriptionsUpdate.log"
+global TASK_NAME    := "Update InstanceSubscriptions"
+global RUN_TIME     := "02:00" ; 24-hour HH:mm
+global WORKING_COPY := Config.path["EPIC_INSTANCE_SUBSCRIPTIONS"]
+global LOG_FILE     := FileLib.getParentFolder(WORKING_COPY) "\InstanceSubscriptionsUpdate.log"
 
-if (A_Args[1] = "/install")
-{
-    InstallTask()
-    ExitApp
+; Install the task if requested; otherwise do the update (the task calls this script too).
+if (A_Args[1] = "/install") {
+	installTask()
+} else {
+	runUpdate()
 }
-
-RunUpdate()
 ExitApp
 
-; ---- Does the nightly svn update and logs the result ----
-RunUpdate()
-{
-    global WorkingCopy, SvnExe, LogFile
+;---------
+; DESCRIPTION:    Run an SVN update on the working copy, logging the output and result.
+;---------
+runUpdate() {
+	writeToLog("SVN update starting")
 
-    FormatTime, stamp, , yyyy-MM-dd HH:mm:ss
-    FileAppend, [%stamp%] svn update starting`n, %LogFile%
+	command := """" Config.getProgramPath("SVN") """ update """ WORKING_COPY """ --non-interactive"
+	output := RunLib.runReturn(command, errorOutput, exitCode)
+	writeToLog(output.appendLine(errorOutput).clean(), false)
 
-    ; Extra outer quotes are required when cmd /c is given a quoted command
-    cmd := """" . SvnExe . """ update """ . WorkingCopy . """ --non-interactive >> """ . LogFile . """ 2>&1"
-    RunWait, % ComSpec . " /c """ . cmd . """", , Hide
-    exitCode := ErrorLevel
-
-    FormatTime, stamp, , yyyy-MM-dd HH:mm:ss
-    FileAppend, [%stamp%] svn update finished (exit code %exitCode%)`n, %LogFile%
+	writeToLog("SVN update finished (exit code " exitCode ")")
 }
 
-; ---- Registers the daily task for the current user ----
-InstallTask()
-{
-    global TaskName, RunTime
+;---------
+; DESCRIPTION:    Register (or replace) a daily scheduled task for the current user that runs this script.
+; NOTES:          The task is set to run as soon as possible after a missed start (helps with
+;                 sleeping laptops).
+;---------
+installTask() {
+	psCommand := "Register-ScheduledTask -TaskName '" TASK_NAME "'"
+	; The \" escapes are for the command line, so that PowerShell ends up with literal quotes around the
+	; script path (in case it has spaces).
+	psCommand .= " -Action (New-ScheduledTaskAction -Execute '" A_AhkPath "' -Argument '\""" A_ScriptFullPath "\""')"
+	psCommand .= " -Trigger (New-ScheduledTaskTrigger -Daily -At '" RUN_TIME "')"
+	psCommand .= " -Settings (New-ScheduledTaskSettingsSet -StartWhenAvailable)"
+	psCommand .= " -Force" ; Replaces any existing task with the same name
 
-    ; Command the task will run: this script
-	tr := """" . A_AhkPath . """ """ . A_ScriptFullPath . """"
+	RunLib.runReturn("powershell.exe -NoProfile -Command """ psCommand """", errorOutput, exitCode)
+	if (exitCode != 0) {
+		writeToLog("Failed to register scheduled task '" TASK_NAME "' (exit code " exitCode "): " errorOutput.clean())
+		Toast.BlockAndShowError("Failed to register scheduled task", errorOutput.clean())
+		return
+	}
 
-    ; schtasks needs inner quotes escaped as \"
-    trEsc := StrReplace(tr, """", "\""")
+	writeToLog("Registered scheduled task '" TASK_NAME "' to run daily at " RUN_TIME)
+	Toast.BlockAndShowMedium("Task '" TASK_NAME "' registered to run daily at " RUN_TIME)
+}
 
-    cmd := "schtasks /Create /TN """ . TaskName . """ /SC DAILY /ST " . RunTime . " /TR """ . trEsc . """ /F"
-    RunWait, % ComSpec . " /c """ . cmd . """", , Hide
-    if (ErrorLevel != 0)
-    {
-        MsgBox, 16, Install failed, schtasks returned exit code %ErrorLevel%.
-        return
-    }
+;---------
+; DESCRIPTION:    Add a line to the log file. Blank messages are skipped.
+; PARAMETERS:
+;  message      (I,REQ) - The message to log.
+;  addTimestamp (I,OPT) - Set to false to write the message as-is, without a timestamp prefix (useful for multi-line
+;                         output, like from a command).
+;---------
+writeToLog(message, addTimestamp := true) {
+	if (message = "")
+		return
 
-    ; schtasks has no switch for "run as soon as possible after a missed start",
-    ; so set StartWhenAvailable through PowerShell (helps with sleeping laptops)
-    ps := "$t = Get-ScheduledTask -TaskName '" . TaskName . "'; "
-        . "$t.Settings.StartWhenAvailable = $true; "
-        . "Set-ScheduledTask -InputObject $t | Out-Null"
-    RunWait, % "powershell.exe -NoProfile -Command """ . ps . """", , Hide
+	if (addTimestamp)
+		message := "[" FormatTime(A_Now, "yyyy-MM-dd HH:mm:ss") "] " message
 
-    MsgBox, 64, Done, Task '%TaskName%' registered to run daily at %RunTime%.
+	FileAppend, % message "`n", % LOG_FILE
 }

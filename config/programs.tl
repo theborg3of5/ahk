@@ -19,6 +19,8 @@
 		Notepad++					Notepad++\notepad++.exe
 		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 		Outlook						Microsoft Office\root\Office16\OUTLOOK.EXE							WORK_DESKTOP
+		TortoiseSVN					TortoiseSVN\bin\TortoiseProc.exe
+		SVN							TortoiseSVN\bin\svn.exe
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
 		Visual Studio				Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe
 		VMware Horizon Client		VMware\VMware Horizon View Client\vmware-view.exe

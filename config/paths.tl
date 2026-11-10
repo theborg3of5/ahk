@@ -57,6 +57,7 @@
 		Epic Source Current S1 Billing Solutions	EPIC_SOURCE_S1_BILL_SOLUTIONS		<EPIC_SOURCE_CURRENT>\stage1\HSWeb\Solutions\Apps\Billing
 		Epic Source EpicCode Workspaces				EPIC_SOURCE_SERVER					C:\EpicSource\Server
 		Epic Source XGDB							EPIC_SOURCE_XGDB					C:\EpicSource\Server\XGDB
+		Epic Source Instance Subscriptions			EPIC_INSTANCE_SUBSCRIPTIONS			C:\EpicSource\InstanceSubscriptions
 		WSL Epic Source Root						WSL_EPIC_SOURCE_ROOT				\\wsl$\Ubuntu-22.04\home\gborg\EpicSource
 		Transaction Diff							TX_DIFF								C:\Program Files\TransactionDiff
 	

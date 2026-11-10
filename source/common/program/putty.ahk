@@ -206,6 +206,16 @@ class Putty {
 
 		ClipboardLib.send(script, "+{Insert}") ; Putty pastes with Shift+Insert, not Ctrl+V
 	}
+
+	;---------
+	; DESCRIPTION:    Replace the DEN ID on the clipboard with the Primary Interconnect URL for that environment.
+	;---------
+	copyInterconnectURLForClipboardDEN() {
+		denId := clipboard.clean()
+		url := EpicLib.selectPrimaryInterconnectURL(denId)
+		if(url)
+			ClipboardLib.setAndToast(url, "Interconnect URL for DEN " denId)
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------

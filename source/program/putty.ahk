@@ -49,6 +49,7 @@
 		}
 	:X:;trace::Putty.lookupTrace() ; Look up trace from execution ID
 	:X:;pullfile::Putty.pullFromFile() ; Run the ;pull macro using a cached version of its copy-paste script
+	:X:;icurl::Putty.copyInterconnectURLForClipboardDEN() ; Swap the DEN ID on the clipboard for its Primary Interconnect URL
 
 ; Limit this to when the mouse is over putty so we don't block scrolling other programs while Putty is active.
 #If Config.isWindowActive("Putty") && Config.isMouseOverWindow("Putty")

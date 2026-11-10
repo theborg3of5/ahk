@@ -570,6 +570,64 @@ class EpicLib {
 		
 		return s.promptMulti("PATH")
 	}
+
+	;---------
+	; DESCRIPTION:    Find the base URL of the Primary Interconnect instance for the given environment, using the
+	;                 locally checked-out InstanceSubscriptions.xml (see updateICInstanceSubscriptions.ahk).
+	; PARAMETERS:
+	;  denId (I,REQ) - The DEN ID of the environment.
+	; RETURNS:        The base URL (i.e. https://vs-icx.epic.com/Interconnect-CDE), or "" if we couldn't find one
+	;                 (or the user didn't pick one).
+	; NOTES:          If any Primary instances are load-balanced, we only consider those - the single-server ones
+	;                 next to them tend to be purpose-specific (Agents, PerimAuth, etc.). If that still leaves
+	;                 multiple distinct URLs, the user picks one.
+	;                 Prestos usually aren't in the file, so if we find nothing for a Presto DEN ID we fall back to
+	;                 the standard Presto URL.
+	;---------
+	selectPrimaryInterconnectURL(denId) {
+		if(denId = "" || !denId.isDigits()) { ; Blank check is needed because isDigits() is true for ""
+			Toast.ShowError("Could not look up Interconnect URL", "DEN ID must be numeric, got: " denId)
+			return ""
+		}
+
+		xmlPath := Config.buildPath("EPIC_INSTANCE_SUBSCRIPTIONS", "InstanceSubscriptions.xml")
+		xml := ComObjCreate("Msxml2.DOMDocument.6.0")
+		xml.async := false
+		if(!xml.load(xmlPath)) {
+			Toast.ShowError("Could not read Interconnect instance list", xml.parseError.reason, xmlPath)
+			return ""
+		}
+
+		balancedURLs := []
+		directURLs   := []
+		For instance in xml.selectNodes("/Machines/Machine/Instances/Instance[DEN='" denId "' and InstanceType='Primary']") {
+			name := instance.selectSingleNode("Name").text
+			balancedHost := instance.selectSingleNode("LoadBalancedHost | loadBalancedHost") ; The file uses both casings
+			if(balancedHost)
+				balancedURLs.push(this.buildInterconnectURL(balancedHost.text, name))
+			else
+				directURLs.push(this.buildInterconnectURL(instance.selectSingleNode("../../Name").text, name)) ; Machine name
+		}
+
+		urls := balancedURLs.length() ? balancedURLs : directURLs
+		urls.removeDuplicates() ; Load-balanced instances show up once per server behind the balancer
+
+		if(urls.length() = 0) {
+			; Prestos (5-digit DEN IDs starting with 3) usually aren't in the file, but follow a predictable pattern.
+			if(denId.length() = 5 && denId.startsWith("3"))
+				return Config.private["EPIC_PRESTO_IC_URL_BASE"].replaceTag("DEN_LAST_4", denId.sub(-3)) ; Last 4 digits
+
+			Toast.ShowError("No Primary Interconnect instance found for DEN " denId, "", "The instance list only updates nightly, so new instances may be missing.")
+			return ""
+		}
+		if(urls.length() = 1)
+			return urls[1]
+
+		s := new Selector().setTitle("Select Interconnect instance for DEN " denId ":")
+		For i,url in urls
+			s.addChoice(new SelectorChoice({ NAME:url, ABBREV:i, URL:url }))
+		return s.prompt("URL")
+	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	
@@ -918,6 +976,21 @@ class EpicLib {
 
 		For _, f in folders[type]
 			s.addChoice(new SelectorChoice({ NAME: f.name, ABBREV: f.abbrev, PATH: f.path }))
+	}
+	
+	;---------
+	; DESCRIPTION:    Build the base URL for an Interconnect instance.
+	; PARAMETERS:
+	;  host         (I,REQ) - The server or load-balanced host. Short names (i.e. vs-icx) get .epic.com added.
+	;  instanceName (I,REQ) - The instance name from InstanceSubscriptions.xml.
+	; RETURNS:        The base URL
+	; NOTES:          A few instance names are missing the Interconnect- prefix, but the URL still needs it.
+	;---------
+	buildInterconnectURL(host, instanceName) {
+		if(!host.contains("."))
+			host .= ".epic.com"
+
+		return "https://" host "/" instanceName.prependIfMissing("Interconnect-")
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

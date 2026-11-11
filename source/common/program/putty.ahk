@@ -114,6 +114,9 @@ class Putty {
 	;                  - portalEnv is the Factory portal environment (foundry, int-st-dev-ci,
 	;                    int-st-qa-ci).
 	;                 Shows an error toast (and does nothing else) if any of the three are missing.
+	;                 For int-st-qa-ci (final), traces can't be looked up automatically, so this puts the
+	;                 execution ID on the clipboard and opens the portal's trace search page instead (where
+	;                 the .trace hotstring in Chrome runs the search).
 	;---------
 	lookupTrace() {
 		; Selection is the execution ID, Chronicles environment, and portal environment.
@@ -127,7 +130,22 @@ class Putty {
 			return
 		}
 
+		portalURL := Config.private["EPIC_FACTORY_PORTAL_URL_BASE"].replaceTag("DEPLOYMENT", portalEnv)
 		pt := new ProgressToast("Finding trace ID for ExecID " execId)
+
+		; int-st-qa-ci (final) traces can't be searched from outside the cluster: the telemetry gateway has no
+		; ingress there (ZQN 8580016), and the Factory trace API returns nothing for tokens we can get. Open the
+		; portal's trace search page with the execution ID on the clipboard to search by hand instead.
+		if (portalEnv = "int-st-qa-ci") {
+			pt.nextStep("Checking portal environment")
+			pt.endStep("final (int-st-qa-ci) - can't look up automatically")
+			pt.nextStep("Copying execution ID to clipboard")
+			clipboard := execId
+			pt.nextStep("Opening portal trace search")
+			Run(portalURL "/agent-factory/traces")
+			pt.finish("Click the filter box and type .trace to search for it")
+			return
+		}
 
 		; CF deployment names (for login) match the portal environment names, except for foundry.
 		if (portalEnv = "foundry")
@@ -135,17 +153,8 @@ class Putty {
 		else
 			cfDeployment := portalEnv
 
-		; For int-st-qa-ci, exec-to-trace.sh reads through the portal's Factory trace API instead of the
-		; telemetry gateway (which isn't reachable from outside that cluster). That needs a portal-public CF
-		; login rather than the plain one the gateway uses.
-		if (portalEnv = "int-st-qa-ci")
-			cfLoginType := "portal"
-		else
-			cfLoginType := "plain"
-
 		pt.nextStep("Querying " portalEnv " factory via WSL")
 		; Actual query happens in WSL, as that's where the auth stuff we need lives.
-		portalURL := Config.private["EPIC_FACTORY_PORTAL_URL_BASE"].replaceTag("DEPLOYMENT", portalEnv)
 		lookupCommand := "wsl.exe ~/dotfiles/bin/exec-to-trace.sh " execId " " chroniclesEnv " " portalURL
 		traceId := RunLib.runReturn(lookupCommand, stderr, exitCode)
 
@@ -154,7 +163,7 @@ class Putty {
 
 			pt.nextStep("Logging into " portalEnv " cluster")
 			; Use RunWait [not runReturn()] because this does need to be an interactive terminal
-			RunWait, wsl.exe ~/dotfiles/bin/cf-factory-login.sh %cfDeployment% %cfLoginType%
+			RunWait, wsl.exe ~/dotfiles/bin/cf-factory-login.sh %cfDeployment%
 			pt.endStep("done")
 
 			pt.nextStep("Retrying trace lookup")

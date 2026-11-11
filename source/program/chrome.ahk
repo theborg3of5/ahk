@@ -43,6 +43,19 @@
 
 	!t::Telegram.shareURL(Chrome.getURL()) ; Share to Telegram.
 
+	; Factory portal trace search: filter on the execution ID field and search for the execution ID on the clipboard.
+	; Used for final (int-st-qa-ci) traces, which Putty.lookupTrace() can't look up automatically.
+	::.trace::
+		SendRaw, exec  ; Filter the field list down to epic.telemetry.workflow.execution.id
+		Sleep, 250
+		Send, {Enter}  ; Select that field
+		Sleep, 250
+		Send, ^v       ; Paste the execution ID
+		Sleep, 100
+		Send, {Enter}  ; Search
+		Send, {Esc}    ; Hide filter dropdown
+	return
+
 ; Chrome hotkeys that only apply on a DLG.
 #If Config.isWindowActive("Chrome") && WinActive("DLG ")
 	^+o::VSCode.openCurrentDLG()   ; Open DLG in EpicCode.

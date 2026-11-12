@@ -190,8 +190,7 @@ class Putty {
 			new TextPopup(tt).show()
 			return
 		}
-		clipboard := traceId
-		pt.endStep(traceId " (now on clipboard)")
+		pt.endStep(traceId)
 
 		pt.nextStep("Building and running URL")
 		url := Config.private["EPIC_FACTORY_TRACE_URL_BASE"].replaceTags({ "DEPLOYMENT":portalEnv, "TRACE_ID":traceId })

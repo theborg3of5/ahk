@@ -89,7 +89,6 @@
 ::hier'l::hierarchical
 ::heir'l::hierarchical
 ::auth'n::authorization
-::qai::QA Instructions
 ::cache''::Caché
 ::snuuz::snüz
 ::med'n::medication
